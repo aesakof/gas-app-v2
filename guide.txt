@@ -1,0 +1,272 @@
+Create a new project folder and cd into it 
+
+Create two folders in the main project folder, 'django-backend' and 'react-frontend'
+
+DJANGO SETUP
+
+cd into django-backend
+
+Create a new virtual environment using pipenv: 
+    pipenv install
+
+Activate the virtual env: 
+    pipenv shell
+
+Install various dependencies:
+    pipenv install django
+    pipenv install djangorestframework
+    pipenv install djangorestframework-simplejwt
+    pipenv install django-cors-headers
+
+Create django project in the current folder:
+    django-admin startproject core .
+
+Create django apps for the main app, its api, and users
+    python manage.py startapp gas_app
+    python manage.py startapp gas_app_api
+    python manage.py startapp users
+
+In core/settings.py, add 'gas_app', 'gas_app_api', 'users', and 'rest_framework' to the list INSTALLED_APPS
+
+In gas_app/urls.py (create the file), add:
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        app_name = 'gas_app'
+
+        urlpatterns = [
+            path('', TemplateView.as_view(template_name="gas_app/index.html")),
+        ]
+
+In gas_app_api/urls.py (create the file), add:
+        from django.urls import path
+        from .views import FillupList, FillupDetail, CarList, CarDetail
+
+        app_name = 'gas_app_api'
+
+        urlpatterns = [
+            path('<int:pk>/', CarDetail.as_view(), name='cardetailcreate'),
+            path('', CarList.as_view(), name='carlistcreate'),
+        ]
+
+Create an index.html file in templates/gas_app (create these folders), and add the following line to it:
+        //index
+
+In core/settings.py, in the TEMPLATES list in DIRS, add the following:
+        TEMPLATES = [
+            {
+                ...
+                'DIRS': [BASE_DIR / 'templates'],
+                ...
+            },
+        ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USERS APP SETUP
+
+In user/models.py, add the following:
+
+        from django.db import models
+        from django.utils import timezone
+        from django.utils.translation import gettext_lazy as _
+        from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+
+
+        class CustomAccountManager(BaseUserManager):
+
+            def create_superuser(self, email, user_name, first_name, password, **other_fields):
+
+                other_fields.setdefault('is_staff', True)
+                other_fields.setdefault('is_superuser', True)
+                other_fields.setdefault('is_active', True)
+
+                if other_fields.get('is_staff') is not True:
+                    raise ValueError(
+                        'Superuser must be assigned to is_staff=True.')
+                if other_fields.get('is_superuser') is not True:
+                    raise ValueError(
+                        'Superuser must be assigned to is_superuser=True.')
+
+                return self.create_user(email, user_name, first_name, password, **other_fields)
+
+            def create_user(self, email, user_name, first_name, password, **other_fields):
+
+                if not email:
+                    raise ValueError(_('You must provide an email address'))
+
+                email = self.normalize_email(email)
+                user = self.model(email=email, user_name=user_name,
+                                first_name=first_name, **other_fields)
+                user.set_password(password)
+                user.save()
+                return user
+
+
+        class AppUser(AbstractBaseUser, PermissionsMixin):
+
+            email = models.EmailField(_('email address'), unique=True)
+            user_name = models.CharField(max_length=150, unique=True)
+            first_name = models.CharField(max_length=150, blank=True)
+            start_date = models.DateTimeField(default=timezone.now)
+            about = models.TextField(_(
+                'about'), max_length=500, blank=True)
+            is_staff = models.BooleanField(default=False)
+            is_active = models.BooleanField(default=False)
+
+            objects = CustomAccountManager()
+
+            USERNAME_FIELD = 'email'
+            REQUIRED_FIELDS = ['user_name', 'first_name']
+
+            def __str__(self):
+                return self.user_name
+
+
+In users/admin.py, add the following:
+
+        from django.contrib import admin
+        from users.models import AppUser
+        from django.contrib.auth.admin import UserAdmin
+        from django.forms import TextInput, Textarea, CharField
+        from django import forms
+        from django.db import models
+
+
+        class UserAdminConfig(UserAdmin):
+            model = AppUser
+            search_fields = ('email', 'user_name', 'first_name',)
+            list_filter = ('email', 'user_name', 'first_name', 'is_active', 'is_staff')
+            ordering = ('-start_date',)
+            list_display = ('email', 'id', 'user_name', 'first_name',
+                            'is_active', 'is_staff')
+            fieldsets = (
+                (None, {'fields': ('email', 'user_name', 'first_name',)}),
+                ('Permissions', {'fields': ('is_staff', 'is_active')}),
+                ('Personal', {'fields': ('about',)}),
+            )
+            formfield_overrides = {
+                models.TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 60})},
+            }
+            add_fieldsets = (
+                (None, {
+                    'classes': ('wide',),
+                    'fields': ('email', 'user_name', 'first_name', 'password1', 'password2', 'is_active', 'is_staff')}
+                ),
+            )
+
+
+        admin.site.register(AppUser, UserAdminConfig)
+
+
+In users/apps.py, add the following:
+
+        from django.apps import AppConfig
+
+
+        class UsersConfig(AppConfig):
+            name = 'users'
+
+
+In users/serializers.py, add the following:
+
+        from rest_framework import serializers
+        from users.models import AppUser
+
+
+        class CustomUserSerializer(serializers.ModelSerializer):
+            """
+            Currently unused in preference of the below.
+            """
+            email = serializers.EmailField(required=True)
+            user_name = serializers.CharField(required=True)
+            password = serializers.CharField(min_length=8, write_only=True)
+
+            class Meta:
+                model = AppUser
+                fields = ('email', 'user_name', 'password')
+                extra_kwargs = {'password': {'write_only': True}}
+
+            def create(self, validated_data):
+                password = validated_data.pop('password', None)
+                # as long as the fields are the same, we can just use this
+                instance = self.Meta.model(**validated_data)
+                if password is not None:
+                    instance.set_password(password)
+                instance.save()
+                return instance
+
+
+In users/urls.py, add the following:
+
+        from django.urls import path
+        from .views import CustomUserCreate, BlacklistTokenUpdateView
+
+        app_name = 'users'
+
+        urlpatterns = [
+            path('register/', CustomUserCreate.as_view(), name='create_user'),
+            path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), name='blacklist')
+        ]
+
+
+In users/views.py, add the following:
+
+        from rest_framework_simplejwt.views import TokenObtainPairView
+        from rest_framework import status
+        from rest_framework.response import Response
+        from rest_framework.views import APIView
+        from .serializers import CustomUserSerializer
+        from rest_framework_simplejwt.tokens import RefreshToken
+        from rest_framework.permissions import AllowAny
+
+
+        class CustomUserCreate(APIView):
+            permission_classes = [AllowAny]
+
+            def post(self, request, format='json'):
+                serializer = CustomUserSerializer(data=request.data)
+                if serializer.is_valid():
+                    user = serializer.save()
+                    if user:
+                        json = serializer.data
+                        return Response(json, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+        class BlacklistTokenUpdateView(APIView):
+            permission_classes = [AllowAny]
+            authentication_classes = ()
+
+            def post(self, request):
+                try:
+                    refresh_token = request.data["refresh_token"]
+                    token = RefreshToken(refresh_token)
+                    token.blacklist()
+                    return Response(status=status.HTTP_205_RESET_CONTENT)
+                except Exception as e:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+In core/settings.py, add the following:
+    # Custom user model
+    AUTH_USER_MODEL = "users.AppUser"
+
+
+
+    pipenv install coverage
+    pipenv install pyyaml
+    pipenv install uritemplate
+    pipenv install coreapi
