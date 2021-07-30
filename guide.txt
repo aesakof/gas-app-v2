@@ -145,6 +145,24 @@ Create the file gas_app_api/serializers.py and create serializers for both model
                 fields = ('username', 'name', 'make', 'model', 'model_year', 'status')
 
 
+Create a superuser: python manage.py createsuperuser
+
+Add the following lines to gas_app/admin.py:
+
+    from django.contrib import admin
+    from . import models
+
+    admin.site.register(models.Fillup)
+    admin.site.register(models.Car)
+
+Run the server: python manage.py runserver
+
+The api calls for creating Cars and Fillups can now be tested at:
+    http://127.0.0.1:8000/api/cars/
+    http://127.0.0.1:8000/api/Fillups/
+
+
+
 
 
 
