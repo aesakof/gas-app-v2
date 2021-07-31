@@ -161,6 +161,17 @@ The api calls for creating Cars and Fillups can now be tested at:
     http://127.0.0.1:8000/api/cars/
     http://127.0.0.1:8000/api/Fillups/
 
+In case of a "no such table" exception (in initial project set up), delete the sqlite db and all migration folders, then run:
+    python manage.py migrate --run-syncdb
+
+Add the following to the end of settings.py:
+
+    REST_FRAMEWORK = {
+        'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.AllowAny',
+        ]
+    }
+
 
 
 
