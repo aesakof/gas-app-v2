@@ -174,6 +174,47 @@ Add the following to the end of settings.py:
 
 
 
+REACT SETUP
+
+In a new terminal window in the gas-app-v2 project folder, create a new react app:
+    npx create-react-app react-frontend
+
+Then navigate into the folder and run the app to ensure it works:
+    cd react-frontend
+    npm start
+
+Create a components folder in src and in that folder create Cars.js, Fillups.js, Footer.js, and Header.js
+
+Install dependencies for the frontend:
+    npm install react-router-dom
+    npm install @material-ui/core
+
+
+DO OTHER FRONT END SET UP STUFF
+
+
+
+
+Install Django Cors headers
+    pipenv install django-cors-headers
+
+And add 'corsheaders' to the list of INSTALLED_APPS in settings.py
+
+And add 'corsheaders.middleware.CorsMiddleware' to the MIDDLEWARE list above 'django.middleware.common.CommonMiddleware' in settings.py
+
+    MIDDLEWARE = [
+        ...
+        'corsheaders.middleware.CorsMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        ...
+    ]
+
+And at the bottom of settings.py, add the following:
+
+    CORS_ALLOWED_ORIGINS = [
+        "http://127.0.0.1:3000"
+    ]
+
 
 
 
