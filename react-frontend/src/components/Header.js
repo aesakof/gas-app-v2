@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from "react-router-dom"
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -29,6 +31,12 @@ function Header() {
 				<Toolbar>
 					<Typography variant="h6" className={classes.text} noWrap>
 						Gas App
+					</Typography>
+                    <Typography variant="h6" className={classes.text} noWrap>
+                        <Link to="/fillups">Fillups</Link>
+					</Typography>
+                    <Typography variant="h6" className={classes.text} noWrap>
+                        <Link to="/cars">Cars</Link>
 					</Typography>
 				</Toolbar>
 			</AppBar>

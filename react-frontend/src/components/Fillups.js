@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 
 
-function Cars() {
+function Fillups() {
     const [types, setTypes] = useState([])
 
     // useEffect(() => {
@@ -26,4 +26,4 @@ function Cars() {
     )
 }
 
-export default Cars
+export default Fillups
