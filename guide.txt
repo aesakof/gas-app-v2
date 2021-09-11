@@ -221,8 +221,11 @@ And at the bottom of settings.py, add the following:
 
 
 
+Add the following entry to REST_FRAMEWORK in settings.py:
 
-
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    )
 
 
 USERS APP SETUP
@@ -274,7 +277,7 @@ In user/models.py, add the following:
             about = models.TextField(_(
                 'about'), max_length=500, blank=True)
             is_staff = models.BooleanField(default=False)
-            is_active = models.BooleanField(default=False)
+            is_active = models.BooleanField(default=True)
 
             objects = CustomAccountManager()
 
@@ -283,6 +286,9 @@ In user/models.py, add the following:
 
             def __str__(self):
                 return self.user_name
+
+
+In gas_app/models.py, add 'from django.conf import settings' to the list of imports, and change all instances of User to settings.AUTH_USER_MODEL
 
 
 In users/admin.py, add the following:
@@ -413,6 +419,8 @@ In users/views.py, add the following:
 In core/settings.py, add the following:
     # Custom user model
     AUTH_USER_MODEL = "users.AppUser"
+
+
 
 
 

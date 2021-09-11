@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import date, datetime
 from django.core.validators import MinValueValidator
+from django.conf import settings
 
 next_year = datetime.today().year+1
 last_30_years = list(range(next_year-30, next_year))
@@ -16,7 +17,7 @@ class Fillup(models.Model):
         def get_queryset(self):
             return super().get_queryset() #.filter()
 
-    username = models.ForeignKey(User,on_delete=models.CASCADE)
+    username = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     date = models.DateField(default=date.today)
     price_per_gallon = models.FloatField(validators=[MinValueValidator(0.0)])
     trip_distance = models.FloatField(validators=[MinValueValidator(0.0)])
@@ -46,7 +47,7 @@ class Car(models.Model):
         def get_queryset(self):
             return super().get_queryset() #.filter()
 
-    username = models.ForeignKey(User,on_delete=models.CASCADE)
+    username = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     name = models.CharField(max_length=25)
     make = models.CharField(max_length=25)
     model = models.CharField(max_length=25)
