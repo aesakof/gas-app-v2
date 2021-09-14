@@ -28,7 +28,7 @@ class CustomAccountManager(BaseUserManager):
 
         email = self.normalize_email(email)
         user = self.model(email=email, user_name=user_name,
-                        first_name=first_name, **other_fields)
+                          first_name=first_name, **other_fields)
         user.set_password(password)
         user.save()
         return user
@@ -43,7 +43,7 @@ class AppUser(AbstractBaseUser, PermissionsMixin):
     about = models.TextField(_(
         'about'), max_length=500, blank=True)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 
