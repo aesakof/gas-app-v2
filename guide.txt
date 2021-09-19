@@ -224,7 +224,7 @@ And at the bottom of settings.py, add the following:
 Add the following entry to REST_FRAMEWORK in settings.py:
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 
 
