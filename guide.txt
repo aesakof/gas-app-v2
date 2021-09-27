@@ -130,6 +130,9 @@ Make migrations and commit them to the db:
     python manage.py makemigrations
     python manage.py migrate
 
+Note: If at any time you are getting an exception saying a table isn't found despite migrating (generally if you delete your sqlite.db), run the following:
+    python manage.py migrate --run-syncdb
+
 Create the file gas_app_api/serializers.py and create serializers for both models:
         from rest_framework import serializers
         from gas_app.models import Fillup, Car
@@ -188,6 +191,7 @@ Create a components folder in src and in that folder create Cars.js, Fillups.js,
 Install dependencies for the frontend:
     npm install react-router-dom
     npm install @material-ui/core
+    npm install @material-ui/icons
 
 
 DO OTHER FRONT END SET UP STUFF
@@ -462,6 +466,40 @@ In users/views.py, add the following:
 In core/settings.py, add the following:
     # Custom user model
     AUTH_USER_MODEL = "users.AppUser"
+
+
+
+
+
+REACT USERS SETUP
+
+In react-frontend/src/components, create login.js, logout.js, and register.js
+
+For api calls, install axios: npm install axios
+
+In the src folder, create axios.js and fill it with the following:
+
+        import axios from 'axios';
+
+        const baseURL = 'http://127.0.0.1:8000/api/';
+
+        const axiosInstance = axios.create({
+            baseURL: baseURL,
+            timeout: 5000,
+            headers: {
+                Authorization: localStorage.getItem('access_token')
+                    ? 'JWT ' + localStorage.getItem('access_token')
+                    : null,
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+            },
+        });
+
+        export default axiosInstance;
+
+
+
+
 
 
 
