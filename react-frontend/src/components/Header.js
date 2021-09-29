@@ -1,5 +1,6 @@
-import { AppBar, Toolbar, Typography, makeStyles, Button } from "@material-ui/core";
-import React from "react";
+import { AppBar, Toolbar, Typography, makeStyles, Button, IconButton, Drawer, MenuItem } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
@@ -19,21 +20,32 @@ const useStyles = makeStyles(() => ({
     toolbar: {
         display: "flex",
         justifyContent: "space-between",
+    },
+    drawerContainer: {
+        padding: "20px 30px",
     }
 }));
 
 const headersData = [
     {
-        label: "Listings",
-        href: "/listings",
+        label: "All Fillups",
+        href: "/fillups",
     },
     {
-        label: "Mentors",
-        href: "/mentors",
+        label: "All Cars",
+        href: "/cars",
     },
     {
-        label: "My Account",
+        label: "My Profile",
         href: "/account",
+    },
+    {
+        label: "Register",
+        href: "/register",
+    },
+    {
+        label: "Login",
+        href: "/login",
     },
     {
         label: "Log Out",
@@ -42,7 +54,29 @@ const headersData = [
 ];
 
 export default function Header() {
-    const {header, logo, menuButton, toolbar } = useStyles();
+    const [state, setState] = useState({
+        mobileView: false,
+        drawerOpen: false
+    });
+
+    const { mobileView, drawerOpen } = state;
+
+    const {header, logo, menuButton, toolbar, drawerContainer } = useStyles();
+
+    useEffect(() => {
+        const setResponsiveness = () => {
+            return window.innerWidth < 900
+                ? setState((prevState) => ({...prevState, mobileView: true}))
+                : setState((prevState) => ({...prevState, mobileView: false}));
+        };
+
+        setResponsiveness();
+        window.addEventListener("resize", () => setResponsiveness());
+
+        return () => {
+            window.removeEventListener("resize", () => setResponsiveness());
+        }
+    }, []);
 
     const displayDesktop = () => {
         return (
@@ -52,6 +86,37 @@ export default function Header() {
             </Toolbar>
         );
     };
+
+    const displayMobile = () => {
+        const handleDrawerOpen = () => setState((prevState) => ({ ...prevState, drawerOpen: true }));
+        const handleDrawerClose = () => setState((prevState) => ({ ...prevState, drawerOpen: false }));
+
+        return (
+            <Toolbar>
+                <IconButton
+                    {... {
+                        edge: "start",
+                        color: "inherit",
+                        "aria-label": "menu",
+                        "aria-haspopup": "true",
+                        onClick: handleDrawerOpen,
+                    }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Drawer
+                    {... {
+                        anchor: "left",
+                        open: drawerOpen,
+                        onClose: handleDrawerClose,
+                    }}
+                >
+                    <div className={drawerContainer}>{getDrawerChoices()}</div>
+                </Drawer>
+                <div>{gasAppLogo}</div>
+            </Toolbar>
+        )
+    }
 
     const gasAppLogo = (
         <Typography variant="h6" component="h1" className={logo}>
@@ -77,9 +142,29 @@ export default function Header() {
         });
     };
 
+    const getDrawerChoices = () => {
+        return headersData.map(({ label, href }) => {
+            return (
+                <MenuItem
+                    {... {
+                        component: RouterLink,
+                        to: href,
+                        color: "inherit",
+                        style: { textDecoration: "none" },
+                        key: label,
+                    }}
+                >
+                    {label}
+                </MenuItem>
+            );
+        });
+    };
+
     return (
         <header>
-            <AppBar className={header}>{displayDesktop()}</AppBar>
+            <AppBar className={header}>
+                {mobileView ? displayMobile() : displayDesktop()}
+            </AppBar>
         </header>
     );
 }
