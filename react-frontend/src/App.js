@@ -8,6 +8,8 @@ import Fillups from "./components/Fillups"
 import Register from "./components/Register"
 import Login from "./components/Login"
 import Logout from "./components/Logout"
+import NewCar from "./components/NewCar"
+import NewFillup from "./components/NewFillup"
 
 
 
@@ -20,14 +22,11 @@ function App() {
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/logout" component={Logout} />
-                <Route exact path="/cars">
-                    <h2>WOW, CARS!</h2>
-                    <Cars />
-                </Route>
-                <Route exact path="/fillups">
-                    <h2>FILL ER UP</h2>
-                    <Fillups />
-                </Route>
+
+                <Route exact path="/cars" component={Cars} />
+                <Route exact path="/new/car" component={NewCar} />
+                <Route exact path="/new/fillup" component={NewFillup} />
+                <Route exact path="/fillups" component={Fillups} />
             </Switch>
             <Footer />
         </div>

@@ -40,6 +40,14 @@ const headersData = [
         href: "/account",
     },
     {
+        label: "New Fillup",
+        href: "/new/fillup",
+    },
+    {
+        label: "New Car",
+        href: "/new/car",
+    },
+    {
         label: "Register",
         href: "/register",
     },
@@ -54,20 +62,16 @@ const headersData = [
 ];
 
 export default function Header() {
-    const [state, setState] = useState({
-        mobileView: false,
-        drawerOpen: false
-    });
+    const [mobileView, setMobileView] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
-    const { mobileView, drawerOpen } = state;
-
-    const {header, logo, menuButton, toolbar, drawerContainer } = useStyles();
+    const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
 
     useEffect(() => {
         const setResponsiveness = () => {
             return window.innerWidth < 900
-                ? setState((prevState) => ({...prevState, mobileView: true}))
-                : setState((prevState) => ({...prevState, mobileView: false}));
+                ? setMobileView(true)
+                : setMobileView(false);
         };
 
         setResponsiveness();
@@ -88,8 +92,8 @@ export default function Header() {
     };
 
     const displayMobile = () => {
-        const handleDrawerOpen = () => setState((prevState) => ({ ...prevState, drawerOpen: true }));
-        const handleDrawerClose = () => setState((prevState) => ({ ...prevState, drawerOpen: false }));
+        const handleDrawerOpen = () => setDrawerOpen(true);
+        const handleDrawerClose = () => setDrawerOpen(false);
 
         return (
             <Toolbar>
