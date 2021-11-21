@@ -75,7 +75,7 @@ function Cars() {
 
             <Container maxWidth="md" component="main">
                 <Button
-                    href={'/admin/create'}
+                    href={'/cars/register'}
                     className={classes.button}
                     variant="contained"
                     color="primary"
@@ -110,14 +110,14 @@ function Cars() {
                                     <TableCell align="left">
                                         <Link
                                             color="textPrimary"
-                                            href={'/admin/edit/' + car.id}
+                                            href={'/cars/edit/' + car.id}
                                             className={classes.link}
                                         >
                                             <EditIcon></EditIcon>
                                         </Link>
                                         <Link
                                             color="textPrimary"
-                                            href={'/admin/delete/' + car.id}
+                                            href={'/cars/delete/' + car.id}
                                             className={classes.link}
                                         >
                                             <DeleteForeverIcon></DeleteForeverIcon>

@@ -30,7 +30,7 @@ function App() {
                 <Route exact path="/cars" component={Cars} />
 
                 <Route exact path="/carslist" component={CarsList} />
-                <Route exact path="/cars/create" component={CreateCar} />
+                <Route exact path="/cars/register" component={CreateCar} />
                 <Route exact path="/cars/edit/:id" component={EditCar} />
                 <Route exact path="/cars/delete/:id" component={DeleteCar} />
 

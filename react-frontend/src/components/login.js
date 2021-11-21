@@ -55,7 +55,7 @@ export default function SignIn() {
 		console.log(formData);
 
 		axiosInstance
-			.post(`token/`, {
+			.post(`/token/`, {
 				email: formData.email,
 				password: formData.password,
 			})
