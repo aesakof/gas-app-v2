@@ -18,14 +18,41 @@ class FillupDetail(generics.RetrieveDestroyAPIView):
     queryset = Fillup.objects.all()
     serializer_class = FillupSerializer
 
+# Display Cars
+class CarList(generics.ListAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
 
-class CarList(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+
+class CarDetail(generics.RetrieveAPIView):
     serializer_class = CarSerializer
 
     def get_object(self, queryset=None, **kwargs):
         item = self.kwargs.get('pk')
-        return get_object_or_404(Car, slug=item)
+        return get_object_or_404(Car, id=item)
+
+
+# Car Admin
+class CreateCar(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+class AdminCarDetail(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+class EditCar(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+class DeleteCar(generics.RetrieveDestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
 
 # class CarList(viewsets.ViewSet):
 #     permission_classes = [IsAuthenticated]

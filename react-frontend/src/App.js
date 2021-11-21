@@ -10,6 +10,10 @@ import Login from "./components/Login"
 import Logout from "./components/Logout"
 import NewCar from "./components/NewCar"
 import NewFillup from "./components/NewFillup"
+import CreateCar from "./components/createcar"
+import EditCar from "./components/editcar"
+import DeleteCar from "./components/deletecar"
+import CarsList from "./components/carlist"
 
 
 
@@ -24,6 +28,12 @@ function App() {
                 <Route exact path="/logout" component={Logout} />
 
                 <Route exact path="/cars" component={Cars} />
+
+                <Route exact path="/carslist" component={CarsList} />
+                <Route exact path="/cars/create" component={CreateCar} />
+                <Route exact path="/cars/edit/:id" component={EditCar} />
+                <Route exact path="/cars/delete/:id" component={DeleteCar} />
+
                 <Route exact path="/new/car" component={NewCar} />
                 <Route exact path="/new/fillup" component={NewFillup} />
                 <Route exact path="/fillups" component={Fillups} />
