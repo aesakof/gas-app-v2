@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import FillupList, FillupDetail, CarList, CarDetail, CreateCar, AdminCarDetail, EditCar, DeleteCar
+from .views import FillupList, FillupDetail, CarList, CarDetail, CreateCar, CarDetail, EditCar, DeleteCar
 
 app_name = 'gas_app_api'
 
@@ -17,7 +17,7 @@ urlpatterns = [
     # Car Admin URLs
     path('cars/', CarList.as_view(), name='carlist'),
     path('cars/create/', CreateCar.as_view(), name='createcar'),
-    path('cars/edit/postdetail/<int:pk>/', AdminCarDetail.as_view(), name='admindetailpost'),
+    path('cars/edit/cardetail/<int:pk>/', CarDetail.as_view(), name='cardetail'),
     path('cars/edit/<int:pk>/', EditCar.as_view(), name='editcar'),
     path('cars/delete/<int:pk>/', DeleteCar.as_view(), name='deletecar'),
 

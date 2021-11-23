@@ -24,12 +24,12 @@ class CarList(generics.ListAPIView):
     serializer_class = CarSerializer
 
 
-class CarDetail(generics.RetrieveAPIView):
-    serializer_class = CarSerializer
+# class CarDetail(generics.RetrieveAPIView):
+#     serializer_class = CarSerializer
 
-    def get_object(self, queryset=None, **kwargs):
-        item = self.kwargs.get('pk')
-        return get_object_or_404(Car, id=item)
+#     def get_object(self, queryset=None, **kwargs):
+#         item = self.kwargs.get('pk')
+#         return get_object_or_404(Car, id=item)
 
 
 # Car Admin
@@ -38,7 +38,7 @@ class CreateCar(generics.CreateAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
-class AdminCarDetail(generics.RetrieveAPIView):
+class CarDetail(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Car.objects.all()
     serializer_class = CarSerializer

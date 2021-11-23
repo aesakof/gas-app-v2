@@ -150,7 +150,7 @@ export default function CreateCar() {
 						className={classes.submit}
 						onClick={handleSubmit}
 					>
-						Create Post
+						Register Car
 					</Button>
 				</form>
 			</div>
