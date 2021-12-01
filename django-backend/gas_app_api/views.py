@@ -8,13 +8,29 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
 
-
+# Display Fillups
 class FillupList(generics.ListCreateAPIView):
     queryset = Fillup.fillupobjects.all()
     serializer_class = FillupSerializer
     
+# Fillup Admin
+class CreateFillup(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Fillup.objects.all()
+    serializer_class = FillupSerializer
 
-class FillupDetail(generics.RetrieveDestroyAPIView):
+class FillupDetail(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Fillup.objects.all()
+    serializer_class = FillupSerializer
+
+class EditFillup(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Fillup.objects.all()
+    serializer_class = FillupSerializer
+
+class DeleteFillup(generics.RetrieveDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Fillup.objects.all()
     serializer_class = FillupSerializer
 
@@ -22,15 +38,6 @@ class FillupDetail(generics.RetrieveDestroyAPIView):
 class CarList(generics.ListAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
-
-
-# class CarDetail(generics.RetrieveAPIView):
-#     serializer_class = CarSerializer
-
-#     def get_object(self, queryset=None, **kwargs):
-#         item = self.kwargs.get('pk')
-#         return get_object_or_404(Car, id=item)
-
 
 # Car Admin
 class CreateCar(generics.CreateAPIView):

@@ -10,10 +10,12 @@ import Login from "./components/Login"
 import Logout from "./components/Logout"
 import NewCar from "./components/NewCar"
 import NewFillup from "./components/NewFillup"
-import CreateCar from "./components/createcar"
-import EditCar from "./components/editcar"
-import DeleteCar from "./components/deletecar"
-import CarsList from "./components/carlist"
+import CreateCar from "./components/CreateCar"
+import EditCar from "./components/EditCar"
+import DeleteCar from "./components/DeleteCar"
+import CreateFillup from "./components/CreateFillup"
+import EditFillup from "./components/EditFillup"
+import DeleteFillup from "./components/DeleteFillup"
 
 
 
@@ -28,15 +30,17 @@ function App() {
                 <Route exact path="/logout" component={Logout} />
 
                 <Route exact path="/cars" component={Cars} />
-
-                <Route exact path="/carslist" component={CarsList} />
                 <Route exact path="/cars/register" component={CreateCar} />
                 <Route exact path="/cars/edit/:id" component={EditCar} />
                 <Route exact path="/cars/delete/:id" component={DeleteCar} />
 
+                <Route exact path="/fillups" component={Fillups} />
+                <Route exact path="/fillups/register" component={CreateFillup} />
+                <Route exact path="/fillups/edit/:id" component={EditFillup} />
+                <Route exact path="/fillups/delete/:id" component={DeleteFillup} />
+
                 <Route exact path="/new/car" component={NewCar} />
                 <Route exact path="/new/fillup" component={NewFillup} />
-                <Route exact path="/fillups" component={Fillups} />
             </Switch>
             <Footer />
         </div>

@@ -16,11 +16,6 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
-// const useStyles = makeStyles({
-//     table: {
-//       minWidth: 650,
-//     },
-// });
 
 const useStyles = makeStyles((theme) => ({
 	cardMedia: {
