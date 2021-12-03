@@ -91,7 +91,7 @@ export default function EditCar() {
 			<div className={classes.paper}>
 				<Avatar className={classes.avatar}></Avatar>
 				<Typography component="h1" variant="h5">
-					Register New Car
+					Edit Car
 				</Typography>
 				<form className={classes.form} noValidate>
 					<Grid container spacing={2}>

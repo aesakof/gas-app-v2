@@ -74,7 +74,7 @@ function Fillups() {
                     variant="contained"
                     color="primary"
                 >
-                    Register New Car
+                    Enter New Fillup
                 </Button>
                 <br></br>
                 <TableContainer component={Paper}>

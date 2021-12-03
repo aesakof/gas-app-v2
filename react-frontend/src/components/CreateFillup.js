@@ -35,11 +35,11 @@ export default function CreateFillup() {
 
     const history = useHistory();
 	const initialFormData = Object.freeze({
-        car_name: '',
-        make: '',
-        model: '',
-        model_year: '',
-        status: ''
+        date: '',
+        price_per_gallon: '',
+        trip_distance: '',
+        gallons: '',
+        car: ''
 	});
 
 	const [formData, updateFormData] = useState(initialFormData);
@@ -56,16 +56,16 @@ export default function CreateFillup() {
         console.log(localStorage.getItem('access_token'));
 		e.preventDefault();
 		axiosInstance
-			.post('/cars/create/', {
+			.post('/fillups/create/', {
                 username: 1,
-                name: formData.car_name,
-                make: formData.make,
-                model: formData.model,
-                model_year: parseInt(formData.model_year),
-                status: formData.status
+                date: formData.date,
+                price_per_gallon: parseFloat(formData.price_per_gallon),
+                trip_distance: parseFloat(formData.trip_distance),
+                gallons: parseFloat(formData.gallons),
+                car: 1
 			})
 			.then((res) => {
-				history.push('/cars/');
+				history.push('/fillups/');
 			});
 	};
 
@@ -77,7 +77,7 @@ export default function CreateFillup() {
 			<div className={classes.paper}>
 				<Avatar className={classes.avatar}></Avatar>
 				<Typography component="h1" variant="h5">
-					Register New Car
+					Enter New Fillup
 				</Typography>
 				<form className={classes.form} noValidate>
 					<Grid container spacing={2}>
@@ -86,10 +86,10 @@ export default function CreateFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="car_name"
-								label="Car Name"
-								name="car_name"
-								autoComplete="car_name"
+								id="date"
+								label="Date"
+								name="date"
+								autoComplete="date"
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -98,10 +98,10 @@ export default function CreateFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="make"
-								label="Make"
-								name="make"
-								autoComplete="make"
+								id="price_per_gallon"
+								label="Price Per Gallon"
+								name="price_per_gallon"
+								autoComplete="price_per_gallon"
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -110,10 +110,10 @@ export default function CreateFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="model"
-								label="Model"
-								name="model"
-								autoComplete="model"
+								id="trip_distance"
+								label="Trip Distance"
+								name="trip_distance"
+								autoComplete="trip_distance"
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -122,10 +122,10 @@ export default function CreateFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="model_year"
-								label="Model Year"
-								name="model_year"
-								autoComplete="model_year"
+								id="gallons"
+								label="Gallons"
+								name="gallons"
+								autoComplete="gallons"
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -134,10 +134,10 @@ export default function CreateFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="status"
-								label="Status"
-								name="status"
-								autoComplete="status"
+								id="car"
+								label="Car"
+								name="car"
+								autoComplete="car"
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -150,7 +150,7 @@ export default function CreateFillup() {
 						className={classes.submit}
 						onClick={handleSubmit}
 					>
-						Register Car
+						Submit Fillup
 					</Button>
 				</form>
 			</div>

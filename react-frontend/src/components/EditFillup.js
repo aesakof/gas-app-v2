@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axiosInstance from '../axios';
 import { useHistory, useParams } from 'react-router-dom';
 //MaterialUI
@@ -31,29 +31,29 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function EditFillup() {
+export default function CreateFillup() {
 
     const history = useHistory();
     const { id } = useParams();
 	const initialFormData = Object.freeze({
-        car_name: '',
-        make: '',
-        model: '',
-        model_year: '',
-        status: ''
+        date: '',
+        price_per_gallon: '',
+        trip_distance: '',
+        gallons: '',
+        car: ''
 	});
 
 	const [formData, updateFormData] = useState(initialFormData);
 
     useEffect(() => {
-        axiosInstance.get('/cars/edit/cardetail/' + id).then((res) => {
+        axiosInstance.get('/fillups/edit/fillupdetail/' + id).then((res) => {
             updateFormData({
                 ...formData,
-                ['car_name']: res.data.name,
-                ['make']: res.data.make,
-                ['model']: res.data.model,
-                ['model_year']: res.data.model_year,
-                ['status']: res.data.status,
+                ['date']: res.data.date,
+                ['price_per_gallon']: res.data.price_per_gallon,
+                ['trip_distance']: res.data.trip_distance,
+                ['gallons']: res.data.gallons,
+                ['car']: res.data.car,
             });
             console.log(res.data);
         });
@@ -68,18 +68,19 @@ export default function EditFillup() {
 	};
 
 	const handleSubmit = (e) => {
+        console.log(localStorage.getItem('access_token'));
 		e.preventDefault();
 		axiosInstance
-			.put('/cars/edit/' + id + '/', {
+            .put('/fillups/edit/' + id + '/', {
                 username: 1,
-                name: formData.car_name,
-                make: formData.make,
-                model: formData.model,
-                model_year: parseInt(formData.model_year),
-                status: formData.status
+                date: formData.date,
+                price_per_gallon: parseFloat(formData.price_per_gallon),
+                trip_distance: parseFloat(formData.trip_distance),
+                gallons: parseFloat(formData.gallons),
+                car: 1
 			})
 			.then((res) => {
-				history.push('/cars/');
+				history.push('/fillups/');
 			});
 	};
 
@@ -91,7 +92,7 @@ export default function EditFillup() {
 			<div className={classes.paper}>
 				<Avatar className={classes.avatar}></Avatar>
 				<Typography component="h1" variant="h5">
-					Register New Car
+					Edit Fillup
 				</Typography>
 				<form className={classes.form} noValidate>
 					<Grid container spacing={2}>
@@ -100,11 +101,11 @@ export default function EditFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="car_name"
-								label="Car Name"
-								name="car_name"
-								autoComplete="car_name"
-                                value={formData.car_name}
+								id="date"
+								label="Date"
+								name="date"
+								autoComplete="date"
+                                value={formData.date}
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -113,11 +114,11 @@ export default function EditFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="make"
-								label="Make"
-								name="make"
-								autoComplete="make"
-                                value={formData.make}
+								id="price_per_gallon"
+								label="Price Per Gallon"
+								name="price_per_gallon"
+								autoComplete="price_per_gallon"
+                                value={formData.price_per_gallon}
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -126,11 +127,11 @@ export default function EditFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="model"
-								label="Model"
-								name="model"
-								autoComplete="model"
-                                value={formData.model}
+								id="trip_distance"
+								label="Trip Distance"
+								name="trip_distance"
+								autoComplete="trip_distance"
+                                value={formData.trip_distance}
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -139,11 +140,11 @@ export default function EditFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="model_year"
-								label="Model Year"
-								name="model_year"
-								autoComplete="model_year"
-                                value={formData.model_year}
+								id="gallons"
+								label="Gallons"
+								name="gallons"
+								autoComplete="gallons"
+                                value={formData.gallons}
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -152,11 +153,11 @@ export default function EditFillup() {
 								variant="outlined"
 								required
 								fullWidth
-								id="status"
-								label="Status"
-								name="status"
-								autoComplete="status"
-                                value={formData.status}
+								id="car"
+								label="Car"
+								name="car"
+								autoComplete="car"
+                                value={formData.car}
 								onChange={handleChange}
 							/>
 						</Grid>
@@ -169,7 +170,7 @@ export default function EditFillup() {
 						className={classes.submit}
 						onClick={handleSubmit}
 					>
-						Update Car
+						Submit Fillup
 					</Button>
 				</form>
 			</div>

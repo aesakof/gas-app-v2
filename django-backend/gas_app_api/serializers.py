@@ -8,8 +8,8 @@ class FillupSerializer(serializers.ModelSerializer):
     # def get_username(self, obj):
     #     return obj.username.user_name
 
-    username = serializers.CharField(source="username.user_name", read_only=True)
-    car = serializers.CharField(source="car.name", read_only=True)
+    # username = serializers.CharField(source="username.user_name", read_only=True)
+    # car = serializers.CharField(source="car.name", read_only=True)
 
     class Meta:
         model = Fillup
