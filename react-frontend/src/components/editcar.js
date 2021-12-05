@@ -71,7 +71,7 @@ export default function EditCar() {
 		e.preventDefault();
 		axiosInstance
 			.put('/cars/edit/' + id + '/', {
-                username: 1,
+                // username: 1,
                 name: formData.car_name,
                 make: formData.make,
                 model: formData.model,

@@ -6,8 +6,8 @@ from . import models
 
 @admin.register(models.Fillup)
 class FillupAdmin(admin.ModelAdmin):
-    list_display = ("username", "date", "price_per_gallon", "trip_distance", "gallons", "car", "total_sale", "mpg")
+    list_display = ("user", "date", "price_per_gallon", "trip_distance", "gallons", "car", "total_sale", "mpg")
 
 @admin.register(models.Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ("username", "make", "model", "model_year", "status")
+    list_display = ("user", "make", "model", "model_year", "status")

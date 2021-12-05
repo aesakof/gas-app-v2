@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import axiosInstance from '../axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -52,13 +53,9 @@ function Fillups() {
     const classes = useStyles();
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/fillups/')
-            .then(res => res.json())
-            .then(data => {
-                console.log(data[0])
-                setFillups(data)
-                
-            })
+        axiosInstance.get('/fillups/').then((res) => {
+            setFillups(res.data)
+        });
     }, [])
 
     return (
@@ -89,6 +86,7 @@ function Fillups() {
                                 <TableCell>Total Sale</TableCell>
                                 <TableCell>MPG</TableCell>
                                 <TableCell>Username</TableCell>
+                                <TableCell>User ID</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -105,6 +103,7 @@ function Fillups() {
                                 <TableCell>{fillup.total_sale}</TableCell>
                                 <TableCell>{fillup.mpg}</TableCell>
                                 <TableCell>{fillup.username}</TableCell>
+                                <TableCell>{fillup.user}</TableCell>
                                 <TableCell align="left">
                                         <Link
                                             color="textPrimary"

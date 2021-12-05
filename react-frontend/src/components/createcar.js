@@ -57,7 +57,7 @@ export default function CreateCar() {
 		e.preventDefault();
 		axiosInstance
 			.post('/cars/create/', {
-                username: 1,
+                // user: 1,
                 name: formData.car_name,
                 make: formData.make,
                 model: formData.model,

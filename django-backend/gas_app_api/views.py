@@ -19,6 +19,9 @@ class CreateFillup(generics.CreateAPIView):
     queryset = Fillup.objects.all()
     serializer_class = FillupSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 class FillupDetail(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Fillup.objects.all()
@@ -44,6 +47,9 @@ class CreateCar(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Car.objects.all()
     serializer_class = CarSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class CarDetail(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]

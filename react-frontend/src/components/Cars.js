@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import axiosInstance from '../axios';
 // import { Link } from "react-router-dom"
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -53,13 +54,9 @@ function Cars() {
     const classes = useStyles();
 
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/cars/')
-            .then(res => res.json())
-            .then(data => {
-                console.log(data[0])
-                setCars(data)
-                
-            })
+        axiosInstance.get('/cars/').then((res) => {
+            setCars(res.data)
+        });
     }, [])
 
     return (
@@ -88,6 +85,7 @@ function Cars() {
                                 <TableCell>Model Year</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell>Username</TableCell>
+                                <TableCell>User ID</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -102,6 +100,7 @@ function Cars() {
                                     <TableCell>{car.model_year}</TableCell>
                                     <TableCell>{car.status}</TableCell>
                                     <TableCell>{car.username}</TableCell>
+                                    <TableCell>{car.user}</TableCell>
                                     <TableCell align="left">
                                         <Link
                                             color="textPrimary"

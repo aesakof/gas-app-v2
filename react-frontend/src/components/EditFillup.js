@@ -72,7 +72,7 @@ export default function CreateFillup() {
 		e.preventDefault();
 		axiosInstance
             .put('/fillups/edit/' + id + '/', {
-                username: 1,
+                // username: 1,
                 date: formData.date,
                 price_per_gallon: parseFloat(formData.price_per_gallon),
                 trip_distance: parseFloat(formData.trip_distance),
