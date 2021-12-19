@@ -22,7 +22,7 @@ class Fillup(models.Model):
     price_per_gallon = models.FloatField(validators=[MinValueValidator(0.0)])
     trip_distance = models.FloatField(validators=[MinValueValidator(0.0)])
     gallons = models.FloatField(validators=[MinValueValidator(0.0)])
-    car = models.ForeignKey('Car',on_delete=models.CASCADE)
+    car = models.ForeignKey('Car',on_delete=models.CASCADE, related_name='fillups')
     objects = models.Manager() # default manager
     fillupobjects = FillupObjects() # custom manager
 
@@ -55,6 +55,10 @@ class Car(models.Model):
     status = models.CharField(max_length=10,choices=STATUS,default='Active')
     objects = models.Manager() # default manager
     carobjects = CarObjects() # custom manager
+
+    # @property
+    # def distance_driven(self):
+    #     return self.fillups.aggregate(sum('trip__distance'))
 
     def __str__(self):
         return self.name

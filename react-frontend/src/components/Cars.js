@@ -55,6 +55,7 @@ function Cars() {
 
     useEffect(() => {
         axiosInstance.get('/cars/').then((res) => {
+            console.log(res.data)
             setCars(res.data)
         });
     }, [])
@@ -86,6 +87,7 @@ function Cars() {
                                 <TableCell>Status</TableCell>
                                 <TableCell>Username</TableCell>
                                 <TableCell>User ID</TableCell>
+                                <TableCell>Distance Driven</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -101,6 +103,7 @@ function Cars() {
                                     <TableCell>{car.status}</TableCell>
                                     <TableCell>{car.username}</TableCell>
                                     <TableCell>{car.user}</TableCell>
+                                    <TableCell>{car.total_distance}</TableCell>
                                     <TableCell align="left">
                                         <Link
                                             color="textPrimary"

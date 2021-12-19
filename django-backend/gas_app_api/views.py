@@ -5,6 +5,7 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenti
 from gas_app.models import Car, Fillup
 from .serializers import CarSerializer, FillupSerializer
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
 from rest_framework.response import Response
 
 
@@ -39,8 +40,11 @@ class DeleteFillup(generics.RetrieveDestroyAPIView):
 
 # Display Cars
 class CarList(generics.ListAPIView):
-    queryset = Car.objects.all()
+    # queryset = Car.objects.all()
     serializer_class = CarSerializer
+
+    def get_queryset(self):
+        return Car.objects.annotate(total_distance=Sum('fillups__trip_distance'))
 
 # Car Admin
 class CreateCar(generics.CreateAPIView):

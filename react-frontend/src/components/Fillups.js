@@ -99,7 +99,7 @@ function Fillups() {
                                 <TableCell>{fillup.price_per_gallon}</TableCell>
                                 <TableCell>{fillup.trip_distance}</TableCell>
                                 <TableCell>{fillup.gallons}</TableCell>
-                                <TableCell>{fillup.car}</TableCell>
+                                <TableCell>{fillup.car_name}</TableCell>
                                 <TableCell>{fillup.total_sale}</TableCell>
                                 <TableCell>{fillup.mpg}</TableCell>
                                 <TableCell>{fillup.username}</TableCell>
