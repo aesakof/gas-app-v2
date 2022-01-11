@@ -46,7 +46,7 @@ export default function EditCar() {
 	const [formData, updateFormData] = useState(initialFormData);
 
     useEffect(() => {
-        axiosInstance.get('/cars/edit/cardetail/' + id).then((res) => {
+        axiosInstance.get('/cars/' + id).then((res) => {
             updateFormData({
                 ...formData,
                 ['car_name']: res.data.name,

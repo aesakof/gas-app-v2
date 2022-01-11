@@ -5,102 +5,86 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenti
 from gas_app.models import Car, Fillup
 from .serializers import CarSerializer, FillupSerializer
 from django.shortcuts import get_object_or_404
-from django.db.models import Sum
+from django.db.models import Sum, Min, Max, Avg, Count
 from rest_framework.response import Response
 
 
-# Display Fillups
-class FillupList(generics.ListCreateAPIView):
-    queryset = Fillup.fillupobjects.all()
-    serializer_class = FillupSerializer
-    
-# Fillup Admin
-class CreateFillup(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Fillup.objects.all()
-    serializer_class = FillupSerializer
+class FillupViewSet(viewsets.ModelViewSet):
+    serializer_class = CarSerializer
+    lookup_field = "id"
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class FillupDetail(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Fillup.objects.all()
-    serializer_class = FillupSerializer
-
-class EditFillup(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Fillup.objects.all()
-    serializer_class = FillupSerializer
-
-class DeleteFillup(generics.RetrieveDestroyAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Fillup.objects.all()
-    serializer_class = FillupSerializer
-
-# Display Cars
-class CarList(generics.ListAPIView):
-    # queryset = Car.objects.all()
+class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
+    lookup_field = "id"
 
     def get_queryset(self):
-        return Car.objects.annotate(total_distance=Sum('fillups__trip_distance'))
-
-# Car Admin
-class CreateCar(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
+        return Car.objects.annotate(total_distance=Sum('fillups__trip_distance')).annotate(first_fillup=Min('fillups__date')).annotate(last_fillup=Max('fillups__date')).annotate(num_fillups=Count('fillups__id')).annotate(gallons_filled=Sum('fillups__gallons'))
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class CarDetail(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
 
-class EditCar(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
-
-class DeleteCar(generics.RetrieveDestroyAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
-
-
-# class CarList(viewsets.ViewSet):
-#     permission_classes = [IsAuthenticated]
-#     queryset = Car.carobjects.all()
-
-#     def list(self, request):
-#         serializer_class = CarSerializer(self.queryset, many=True)
-#         return Response(serializer_class.data)
-
-#     def create(self, request):
-#         pass
-
-#     def retrieve(self, request):
-#         pass
-
-#     def update(self, request):
-#         pass
-
-#     def partial_update(self, request):
-#         pass
-
-#     def destroy(self, request):
-#         pass
-
-
-
-# class CarList(generics.ListCreateAPIView):
-#     queryset = Car.carobjects.all()
-#     serializer_class = CarSerializer
+# # Display Fillups
+# class FillupList(generics.ListCreateAPIView):
+#     queryset = Fillup.fillupobjects.all()
+#     serializer_class = FillupSerializer
     
+# # Fillup Admin
+# class CreateFillup(generics.CreateAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Fillup.objects.all()
+#     serializer_class = FillupSerializer
 
-# class CarDetail(generics.RetrieveDestroyAPIView):
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user)
+
+# class FillupDetail(generics.RetrieveAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Fillup.objects.all()
+#     serializer_class = FillupSerializer
+
+# class EditFillup(generics.UpdateAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Fillup.objects.all()
+#     serializer_class = FillupSerializer
+
+# class DeleteFillup(generics.RetrieveDestroyAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Fillup.objects.all()
+#     serializer_class = FillupSerializer
+
+
+# # Display Cars
+# class CarList(generics.ListAPIView):
+#     # queryset = Car.objects.all()
+#     serializer_class = CarSerializer
+
+#     def get_queryset(self):
+#         return Car.objects.annotate(total_distance=Sum('fillups__trip_distance')).annotate(first_fillup=Min('fillups__date')).annotate(last_fillup=Max('fillups__date')).annotate(num_fillups=Count('fillups__id')).annotate(gallons_filled=Sum('fillups__gallons'))
+
+# # Car Admin
+# class CreateCar(generics.CreateAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Car.objects.all()
+#     serializer_class = CarSerializer
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user)
+
+# class CarDetail(generics.RetrieveAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Car.objects.all()
+#     serializer_class = CarSerializer
+
+# class EditCar(generics.UpdateAPIView):
+#     permission_classes = [IsAuthenticated]
+#     queryset = Car.objects.all()
+#     serializer_class = CarSerializer
+
+# class DeleteCar(generics.RetrieveDestroyAPIView):
+#     permission_classes = [IsAuthenticated]
 #     queryset = Car.objects.all()
 #     serializer_class = CarSerializer

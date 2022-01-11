@@ -66,7 +66,7 @@ function Cars() {
             cars === null ?
             <h5>Loading cars data...</h5> :
 
-            <Container maxWidth="md" component="main">
+            <Container maxWidth="xl" component="main">
                 <Button
                     href={'/cars/register'}
                     className={classes.button}
@@ -86,8 +86,12 @@ function Cars() {
                                 <TableCell>Model Year</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell>Username</TableCell>
-                                <TableCell>User ID</TableCell>
                                 <TableCell>Distance Driven</TableCell>
+                                <TableCell>First Fillup</TableCell>
+                                <TableCell>Last Fillup</TableCell>
+                                <TableCell>Number of Fillups</TableCell>
+                                <TableCell>Gallons Filled</TableCell>
+                                <TableCell>Average MPG</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -102,8 +106,12 @@ function Cars() {
                                     <TableCell>{car.model_year}</TableCell>
                                     <TableCell>{car.status}</TableCell>
                                     <TableCell>{car.username}</TableCell>
-                                    <TableCell>{car.user}</TableCell>
                                     <TableCell>{car.total_distance}</TableCell>
+                                    <TableCell>{car.first_fillup}</TableCell>
+                                    <TableCell>{car.last_fillup}</TableCell>
+                                    <TableCell>{car.num_fillups}</TableCell>
+                                    <TableCell>{car.gallons_filled}</TableCell>
+                                    <TableCell>{car.avg_mpg}</TableCell>
                                     <TableCell align="left">
                                         <Link
                                             color="textPrimary"

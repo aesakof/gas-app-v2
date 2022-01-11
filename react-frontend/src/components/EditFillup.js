@@ -46,7 +46,7 @@ export default function CreateFillup() {
 	const [formData, updateFormData] = useState(initialFormData);
 
     useEffect(() => {
-        axiosInstance.get('/fillups/edit/fillupdetail/' + id).then((res) => {
+        axiosInstance.get('/fillups/' + id).then((res) => {
             updateFormData({
                 ...formData,
                 ['date']: res.data.date,

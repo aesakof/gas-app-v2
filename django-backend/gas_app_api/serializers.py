@@ -15,10 +15,14 @@ class CarSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(source="user.user_name", read_only=True)
 
-    total_distance = serializers.FloatField()
+    total_distance = serializers.FloatField(read_only=True)
+    first_fillup = serializers.DateField(read_only=True)
+    last_fillup = serializers.DateField(read_only=True)
+    num_fillups = serializers.IntegerField(read_only=True)
+    gallons_filled = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Car
-        fields = ('id', 'name', 'make', 'model', 'model_year', 'status', 'username', 'total_distance')
+        fields = ('id', 'name', 'make', 'model', 'model_year', 'status', 'username', 'total_distance', 'first_fillup', 'last_fillup', 'num_fillups', 'gallons_filled')
 
 
