@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, include
+from django.conf.urls import url
 from rest_framework import urlpatterns
-from rest_framework.routers import SimpleRouter
+from rest_framework.routers import SimpleRouter, DefaultRouter
 
 from .views import CarViewSet, FillupViewSet
 # from .views import FillupList, FillupDetail, CreateFillup, EditFillup, DeleteFillup, CarList, CreateCar, CarDetail, EditCar, DeleteCar
@@ -8,16 +9,14 @@ from .views import CarViewSet, FillupViewSet
 
 app_name = 'gas_app_api'
 
-car_router = SimpleRouter()
-car_router.register(r'cars', CarViewSet, basename='Cars')
+router = DefaultRouter()
+router.register(r'cars', CarViewSet)
+router.register(r'fillups', FillupViewSet)
 
-fillup_router = SimpleRouter()
-fillup_router.register(r'fillups', FillupViewSet, basename='Fillups')
+urlpatterns = [
+    path('', include(router.urls)),
+]
 
-urlpatterns = []
-
-urlpatterns += fillup_router.urls
-urlpatterns += car_router.urls
 
 # urlpatterns = [
 #     # Car URLs

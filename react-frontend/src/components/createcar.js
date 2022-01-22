@@ -56,7 +56,7 @@ export default function CreateCar() {
         console.log(localStorage.getItem('access_token'));
 		e.preventDefault();
 		axiosInstance
-			.post('/cars/create/', {
+			.post('/cars/', {
                 // user: 1,
                 name: formData.car_name,
                 make: formData.make,

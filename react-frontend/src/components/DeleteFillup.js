@@ -13,7 +13,7 @@ export default function DeleteFillup() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		axiosInstance
-			.delete('fillups/delete/' + id)
+			.delete('fillups/' + id)
 			.catch(function (error) {
 				if (error.response) {
 					console.log(error.response.data);

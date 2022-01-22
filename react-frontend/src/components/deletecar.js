@@ -13,7 +13,7 @@ export default function DeleteCar() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		axiosInstance
-			.delete('cars/delete/' + id)
+			.delete('cars/' + id)
 			.catch(function (error) {
 				if (error.response) {
 					console.log(error.response.data);

@@ -71,7 +71,7 @@ export default function CreateFillup() {
         console.log(localStorage.getItem('access_token'));
 		e.preventDefault();
 		axiosInstance
-            .put('/fillups/edit/' + id + '/', {
+            .put('/fillups/' + id + '/', {
                 // username: 1,
                 date: formData.date,
                 price_per_gallon: parseFloat(formData.price_per_gallon),

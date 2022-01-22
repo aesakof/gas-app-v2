@@ -10,15 +10,20 @@ from rest_framework.response import Response
 
 
 class FillupViewSet(viewsets.ModelViewSet):
-    serializer_class = CarSerializer
+    serializer_class = FillupSerializer
     lookup_field = "id"
+
+    queryset = Fillup.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     lookup_field = "id"
+
+    queryset = Car.objects.all()
 
     def get_queryset(self):
         return Car.objects.annotate(total_distance=Sum('fillups__trip_distance')).annotate(first_fillup=Min('fillups__date')).annotate(last_fillup=Max('fillups__date')).annotate(num_fillups=Count('fillups__id')).annotate(gallons_filled=Sum('fillups__gallons'))

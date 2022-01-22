@@ -70,7 +70,7 @@ export default function EditCar() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		axiosInstance
-			.put('/cars/edit/' + id + '/', {
+			.put('/cars/' + id + '/', {
                 // username: 1,
                 name: formData.car_name,
                 make: formData.make,
