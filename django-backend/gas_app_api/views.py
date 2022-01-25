@@ -2,6 +2,8 @@ from rest_framework import generics, viewsets, filters
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
+
 from gas_app.models import Car, Fillup
 from .serializers import CarSerializer, FillupSerializer
 from django.shortcuts import get_object_or_404
@@ -12,6 +14,8 @@ from rest_framework.response import Response
 class FillupViewSet(viewsets.ModelViewSet):
     serializer_class = FillupSerializer
     lookup_field = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ('user__user_name',)
 
     queryset = Fillup.objects.all()
 
@@ -22,6 +26,8 @@ class FillupViewSet(viewsets.ModelViewSet):
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     lookup_field = "id"
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ('user__user_name',)
 
     queryset = Car.objects.all()
 

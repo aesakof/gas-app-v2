@@ -57,7 +57,7 @@ export default function EditCar() {
             });
             console.log(res.data);
         });
-    }, [updateFormData]);
+    }, []);
 
 	const handleChange = (e) => {
         updateFormData({

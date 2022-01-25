@@ -57,7 +57,11 @@ export default function CreateFillup() {
             });
             console.log(res.data);
         });
-    }, [updateFormData]);
+    }, []);
+
+    useEffect(() => {
+        
+    }, [])
 
 	const handleChange = (e) => {
         updateFormData({

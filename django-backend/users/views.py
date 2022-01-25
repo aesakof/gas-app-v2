@@ -2,9 +2,23 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from .serializers import CustomUserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
+
+
+@api_view()
+def CheckAuthentication(request):
+    if request.user.is_authenticated:
+        return Response({
+            "message": "Authenticated",
+            "username": request.user.user_name
+        })
+    else:
+        return Response({
+            "message": "Not authenticated",
+        })
 
 
 class CustomUserCreate(APIView):

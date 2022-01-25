@@ -17,6 +17,7 @@ Install various dependencies:
     pipenv install djangorestframework
     pipenv install djangorestframework-simplejwt
     pipenv install django-cors-headers
+    pipenv install django-filter
 
 Create django project in the current folder:
     django-admin startproject core .
@@ -26,7 +27,7 @@ Create django apps for the main app, its api, and users
     python manage.py startapp gas_app_api
     python manage.py startapp users
 
-In core/settings.py, add 'gas_app', 'gas_app_api', 'users', and 'rest_framework' to the list INSTALLED_APPS
+In core/settings.py, add 'gas_app', 'gas_app_api', 'users', 'rest_framework', and 'django_filters' to the list INSTALLED_APPS
 
 In gas_app/urls.py (create the file), add:
         from django.urls import path
