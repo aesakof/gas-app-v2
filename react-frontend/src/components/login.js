@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axiosInstance from '../axios';
 import { useHistory } from 'react-router-dom';
+import { Context } from '../Context';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -42,6 +43,7 @@ export default function SignIn() {
 	});
 
 	const [formData, updateFormData] = useState(initialFormData);
+    const { username, setUsername } = useContext(Context)
 
 	const handleChange = (e) => {
 		updateFormData({
@@ -64,6 +66,11 @@ export default function SignIn() {
 				localStorage.setItem('refresh_token', res.data.refresh);
 				axiosInstance.defaults.headers['Authorization'] =
 					'Bearer ' + localStorage.getItem('access_token');
+
+                axiosInstance.get(`/user/checkauth`).then((res) => 
+                    setUsername(res.data.username)
+                )
+
 				history.push('/');
 
 				//console.log(res);

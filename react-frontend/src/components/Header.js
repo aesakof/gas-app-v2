@@ -1,7 +1,8 @@
 import { AppBar, Toolbar, Typography, makeStyles, Button, IconButton, Drawer, MenuItem } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { Context } from "../Context";
 
 const useStyles = makeStyles(() => ({
     header: {
@@ -26,46 +27,64 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const headersData = [
-    {
-        label: "All Fillups",
-        href: "/fillups",
-    },
-    {
-        label: "All Cars",
-        href: "/cars",
-    },
-    {
-        label: "My Profile",
-        href: "/account",
-    },
-    {
-        label: "New Fillup",
-        href: "/new/fillup",
-    },
-    {
-        label: "New Car",
-        href: "/new/car",
-    },
-    {
-        label: "Register",
-        href: "/register",
-    },
-    {
-        label: "Login",
-        href: "/login",
-    },
-    {
-        label: "Log Out",
-        href: "/logout",
-    },
-];
+const getHeaders = (username) => {
+    const headers = [
+        {
+            label: "All Fillups",
+            href: "/fillups",
+        },
+        {
+            label: "All Cars",
+            href: "/cars",
+        },
+        {
+            label: "My Profile",
+            href: "/account",
+        },
+        {
+            label: "New Fillup",
+            href: "/fillups/new",
+        },
+        {
+            label: "New Car",
+            href: "/cars/register",
+        }
+    ]
+    if(!username) {
+        return [
+            ...headers,
+            {
+                label: "Register",
+                href: "/register",
+            },
+            {
+                label: "Login",
+                href: "/login",
+            },
+        ]
+    } else {
+        return [
+            ...headers,
+            {
+                label: username,
+                href: "/profile",
+            },
+            {
+                label: "Log Out",
+                href: "/logout",
+            }
+        ]
+    }
+}
+
 
 export default function Header() {
     const [mobileView, setMobileView] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
+
+    const { username } = useContext(Context);
 
     useEffect(() => {
         const setResponsiveness = () => {
@@ -129,25 +148,25 @@ export default function Header() {
     );
 
     const getMenuButtons = () => {
-        return headersData.map(({ label, href }) => {
+        return getHeaders(username).map(({ label, href }) => {
             return (
-            <Button
-                {...{
-                    key: label,
-                    color: "inherit",
-                    to: href,
-                    component: RouterLink,
-                    className: menuButton
-                }}
-            >
-                {label}
-            </Button>
+                <Button
+                    {...{
+                        key: label,
+                        color: "inherit",
+                        to: href,
+                        component: RouterLink,
+                        className: menuButton
+                    }}
+                >
+                    {label}
+                </Button>
             );
         });
     };
 
     const getDrawerChoices = () => {
-        return headersData.map(({ label, href }) => {
+        return getHeaders(username).map(({ label, href }) => {
             return (
                 <MenuItem
                     {... {
