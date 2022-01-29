@@ -21,7 +21,7 @@ function App() {
     return (
         <div>
             <Header />
-            <h1>LOOK AT ALL THIS STUFF</h1>
+            <h1>Gas App</h1>
             <Switch>
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/login" component={Login} />

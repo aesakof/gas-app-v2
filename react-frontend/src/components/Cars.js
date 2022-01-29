@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import axiosInstance from '../axios';
-// import { Link } from "react-router-dom"
+import { Context } from "../Context";
+import { Link } from "react-router-dom"
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -12,7 +13,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
@@ -53,6 +53,8 @@ function Cars() {
     const [cars, setCars] = useState(null)
     const classes = useStyles();
 
+    const { username, setUsername } = useContext(Context);
+
     useEffect(() => {
         axiosInstance.get('/cars/').then((res) => {
             console.log(res.data)
@@ -67,14 +69,16 @@ function Cars() {
             <h5>Loading cars data...</h5> :
 
             <Container maxWidth="xl" component="main">
-                <Button
-                    href={'/cars/register'}
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                >
-                    Register New Car
-                </Button>
+                <Link to={'/cars/register'}>
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                    >
+                        Register New Car
+                    </Button>
+                </Link>
+
                 <br></br>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
@@ -113,21 +117,24 @@ function Cars() {
                                     <TableCell>{car.gallons_filled}</TableCell>
                                     <TableCell>{car.avg_mpg}</TableCell>
                                     <TableCell align="left">
-                                        <Link
-                                            color="textPrimary"
-                                            href={'/cars/edit/' + car.id}
-                                            className={classes.link}
-                                        >
-                                            <EditIcon></EditIcon>
-                                        </Link>
-                                        <Link
-                                            color="textPrimary"
-                                            href={'/cars/delete/' + car.id}
-                                            className={classes.link}
-                                        >
-                                            <DeleteForeverIcon></DeleteForeverIcon>
-                                        </Link>
+                                        { username !== car.username ?
+                                        <></> : 
+                                        <>
+                                            <Link
+                                                to={'/cars/edit/' + car.id}
+                                                className={classes.link}
+                                            >
+                                                <EditIcon color="primary"></EditIcon>
+                                            </Link>
+                                            <Link
+                                                to={'/cars/delete/' + car.id}
+                                                className={classes.link}
+                                            >
+                                                <DeleteForeverIcon color="primary"></DeleteForeverIcon>
+                                            </Link>
+                                        </>}
 									</TableCell>
+                                    
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import axiosInstance from '../axios';
+import { Context } from "../Context";
+import { Link } from "react-router-dom"
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -11,7 +13,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
@@ -52,6 +53,8 @@ function Fillups() {
     const [fillups, setFillups] = useState(null)
     const classes = useStyles();
 
+    const { username, setUsername } = useContext(Context);
+
     useEffect(() => {
         axiosInstance.get('/fillups/').then((res) => {
             setFillups(res.data)
@@ -65,14 +68,15 @@ function Fillups() {
             <h5>Loading fillups data...</h5> :
 
             <Container maxWidth="lg" component="main">
-                <Button
-                    href={'/fillups/register'}
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                >
-                    Enter New Fillup
-                </Button>
+                <Link to={'/fillups/new'}>
+                    <Button
+                        className={classes.button}
+                        variant="contained"
+                        color="primary"
+                    >
+                        Enter New Fillup
+                    </Button>
+                </Link>
                 <br></br>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
@@ -93,33 +97,37 @@ function Fillups() {
                         <TableBody>
                             {fillups.map((fillup) => (
                                 <TableRow key={fillup.date}>
-                                <TableCell component="th" scope="row">
-                                    {fillup.date}
-                                </TableCell>
-                                <TableCell>{fillup.price_per_gallon}</TableCell>
-                                <TableCell>{fillup.trip_distance}</TableCell>
-                                <TableCell>{fillup.gallons}</TableCell>
-                                <TableCell>{fillup.car_name}</TableCell>
-                                <TableCell>{fillup.total_sale}</TableCell>
-                                <TableCell>{fillup.mpg}</TableCell>
-                                <TableCell>{fillup.username}</TableCell>
-                                <TableCell>{fillup.user}</TableCell>
-                                <TableCell align="left">
-                                        <Link
-                                            color="textPrimary"
-                                            href={'/fillups/edit/' + fillup.id}
-                                            className={classes.link}
-                                        >
-                                            <EditIcon></EditIcon>
-                                        </Link>
-                                        <Link
-                                            color="textPrimary"
-                                            href={'/fillups/delete/' + fillup.id}
-                                            className={classes.link}
-                                        >
-                                            <DeleteForeverIcon></DeleteForeverIcon>
-                                        </Link>
-									</TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {fillup.date}
+                                    </TableCell>
+                                    <TableCell>{fillup.price_per_gallon}</TableCell>
+                                    <TableCell>{fillup.trip_distance}</TableCell>
+                                    <TableCell>{fillup.gallons}</TableCell>
+                                    <TableCell>{fillup.car_name}</TableCell>
+                                    <TableCell>{fillup.total_sale}</TableCell>
+                                    <TableCell>{fillup.mpg}</TableCell>
+                                    <TableCell>{fillup.username}</TableCell>
+                                    <TableCell>{fillup.user}</TableCell>
+                                    <TableCell align="left">
+                                        { username !== fillup.username ?
+                                        <></> : 
+                                        <>
+                                            <Link
+                                                color="textPrimary"
+                                                href={'/fillups/edit/' + fillup.id}
+                                                className={classes.link}
+                                            >
+                                                <EditIcon color="primary"></EditIcon>
+                                            </Link>
+                                            <Link
+                                                color="textPrimary"
+                                                href={'/fillups/delete/' + fillup.id}
+                                                className={classes.link}
+                                            >
+                                                <DeleteForeverIcon color="primary"></DeleteForeverIcon>
+                                            </Link>
+                                        </>}
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -3,7 +3,7 @@ import axiosInstance from '../axios';
 import { useHistory } from 'react-router-dom';
 import { Context } from '../Context';
 
-export default function SignUp() {
+export default function Logout() {
 	const history = useHistory();
     const { setUsername } = useContext(Context)
 
@@ -17,7 +17,7 @@ export default function SignUp() {
 
         setUsername(null);
 
-		history.push('/login');
+		history.push('/login/');
 	});
 	return <div>Logout</div>;
 }

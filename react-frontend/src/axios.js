@@ -38,6 +38,16 @@ axiosInstance.interceptors.response.use(
 			return Promise.reject(error);
 		}
 
+        if (
+            error.response.status === 401 &&
+            error.response.data.code === 'token_not_valid' &&
+            error.response.data.detail === 'Token is invalid or expired'
+        ) {
+            console.log('Refresh token expired');
+            window.location.href = '/login/';
+            return Promise.reject(error);
+        }
+
 		if (
 			error.response.data.code === 'token_not_valid' &&
 			error.response.status === 401 &&
@@ -46,37 +56,25 @@ axiosInstance.interceptors.response.use(
 			const refreshToken = localStorage.getItem('refresh_token');
 
 			if (refreshToken) {
-                console.log(refreshToken.split('.')[1])
-				const tokenParts = JSON.parse(atob(refreshToken.split('.')[1]));
+                return axiosInstance
+                    .post('/token/refresh/', {
+                        refresh: refreshToken
+                    })
+                    .then((response) => {
+                        localStorage.setItem('access_token', response.data.access);
+                        localStorage.setItem('refresh_token', response.data.refresh);
 
-				// exp date in token is expressed in seconds, while now() returns milliseconds:
-				const now = Math.ceil(Date.now() / 1000);
-				console.log(tokenParts.exp);
+                        axiosInstance.defaults.headers['Authorization'] =
+                            'Bearer ' + response.data.access;
+                        originalRequest.headers['Authorization'] =
+                            'Bearer ' + response.data.access;
 
-				if (tokenParts.exp > now) {
-					return axiosInstance
-						.post('/token/refresh/', {
-							refresh: refreshToken
-						})
-						.then((response) => {
-							localStorage.setItem('access_token', response.data.access);
-							localStorage.setItem('refresh_token', response.data.refresh);
-
-							axiosInstance.defaults.headers['Authorization'] =
-								'Bearer ' + response.data.access;
-							originalRequest.headers['Authorization'] =
-								'Bearer ' + response.data.access;
-
-							return axiosInstance(originalRequest);
-						})
-						.catch((err) => {
-							console.log(err);
-                            window.location.href = '/login/';
-						});
-				} else {
-					console.log('Refresh token is expired', tokenParts.exp, now);
-					window.location.href = '/login/';
-				}
+                        return axiosInstance(originalRequest);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        window.location.href = '/login/';
+                    });
 			} else {
 				console.log('Refresh token not available.');
 				window.location.href = '/login/';

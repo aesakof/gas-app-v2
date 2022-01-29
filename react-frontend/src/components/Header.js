@@ -37,18 +37,10 @@ const getHeaders = (username) => {
             label: "All Cars",
             href: "/cars",
         },
-        {
-            label: "My Profile",
-            href: "/account",
-        },
-        {
-            label: "New Fillup",
-            href: "/fillups/new",
-        },
-        {
-            label: "New Car",
-            href: "/cars/register",
-        }
+        // {
+        //     label: "My Profile",
+        //     href: "/account",
+        // }
     ]
     if(!username) {
         return [
@@ -65,6 +57,14 @@ const getHeaders = (username) => {
     } else {
         return [
             ...headers,
+            {
+                label: "New Fillup",
+                href: "/fillups/new",
+            },
+            {
+                label: "New Car",
+                href: "/cars/register",
+            },
             {
                 label: username,
                 href: "/profile",

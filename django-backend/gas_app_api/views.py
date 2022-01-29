@@ -1,7 +1,7 @@
 from rest_framework import generics, viewsets, filters
 from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 
 from gas_app.models import Car, Fillup
@@ -22,6 +22,13 @@ class FillupViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+    def get_permissions(self):
+        if self.action in ['update', 'partial_update', 'destroy', 'create']:
+            self.permission_classes = [IsAuthenticated, ]
+        else:
+            self.permission_classes = [AllowAny, ]
+        return super().get_permissions()
+
 
 class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
@@ -36,6 +43,13 @@ class CarViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def get_permissions(self):
+        if self.action in ['update', 'partial_update', 'destroy', 'create']:
+            self.permission_classes = [IsAuthenticated, ]
+        else:
+            self.permission_classes = [AllowAny, ]
+        return super().get_permissions()
 
 
 # # Display Fillups

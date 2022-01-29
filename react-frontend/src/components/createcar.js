@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axiosInstance from '../axios';
 import { useHistory } from 'react-router-dom';
+import { Context } from '../Context';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -43,6 +44,8 @@ export default function CreateCar() {
 	});
 
 	const [formData, updateFormData] = useState(initialFormData);
+
+    const { username, setUsername } = useContext(Context);
 
 	const handleChange = (e) => {
         updateFormData({
