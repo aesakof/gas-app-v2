@@ -67,11 +67,12 @@ export default function Login() {
 				axiosInstance.defaults.headers['Authorization'] =
 					'Bearer ' + localStorage.getItem('access_token');
 
-                axiosInstance.get(`/user/checkauth`).then((res) => 
+                axiosInstance.get(`/user/checkauth`).then((res) => {
                     setUsername(res.data.username)
-                )
+                    localStorage.setItem('username', res.data.username)
+                })
 
-				history.push('/');
+				history.push('/profile');
 
 				//console.log(res);
 				//console.log(res.data);

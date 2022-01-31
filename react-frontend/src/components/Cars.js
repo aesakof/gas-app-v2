@@ -69,6 +69,8 @@ function Cars() {
             <h5>Loading cars data...</h5> :
 
             <Container maxWidth="xl" component="main">
+                { !username ?
+                <></> :
                 <Link to={'/cars/register'}>
                     <Button
                         className={classes.button}
@@ -77,7 +79,7 @@ function Cars() {
                     >
                         Register New Car
                     </Button>
-                </Link>
+                </Link> }
 
                 <br></br>
                 <TableContainer component={Paper}>

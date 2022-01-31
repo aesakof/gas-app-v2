@@ -13,11 +13,12 @@ export default function Logout() {
 		});
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('refresh_token');
+        localStorage.removeItem('username')
 		axiosInstance.defaults.headers['Authorization'] = null;
 
         setUsername(null);
 
 		history.push('/login/');
 	});
-	return <div>Logout</div>;
+	return <div>You are being logged out</div>;
 }

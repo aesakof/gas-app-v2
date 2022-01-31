@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axiosInstance from '../axios';
 import { useHistory, useParams } from 'react-router-dom';
+import { Context } from '../Context';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -45,6 +46,8 @@ export default function EditCar() {
 
 	const [formData, updateFormData] = useState(initialFormData);
 
+    const { username } = useContext(Context);
+
     useEffect(() => {
         axiosInstance.get('/cars/' + id).then((res) => {
             updateFormData({
@@ -55,7 +58,9 @@ export default function EditCar() {
                 ['model_year']: res.data.model_year,
                 ['status']: res.data.status,
             });
-            console.log(res.data);
+            if(username !== res.data.username) {
+                window.location.href = '/cars';
+            }
         });
     }, []);
 

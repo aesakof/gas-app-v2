@@ -68,6 +68,8 @@ function Fillups() {
             <h5>Loading fillups data...</h5> :
 
             <Container maxWidth="lg" component="main">
+                { !username ?
+                <></> :
                 <Link to={'/fillups/new'}>
                     <Button
                         className={classes.button}
@@ -76,7 +78,7 @@ function Fillups() {
                     >
                         Enter New Fillup
                     </Button>
-                </Link>
+                </Link>}
                 <br></br>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
@@ -90,7 +92,6 @@ function Fillups() {
                                 <TableCell>Total Sale</TableCell>
                                 <TableCell>MPG</TableCell>
                                 <TableCell>Username</TableCell>
-                                <TableCell>User ID</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
                         </TableHead>
@@ -107,21 +108,18 @@ function Fillups() {
                                     <TableCell>{fillup.total_sale}</TableCell>
                                     <TableCell>{fillup.mpg}</TableCell>
                                     <TableCell>{fillup.username}</TableCell>
-                                    <TableCell>{fillup.user}</TableCell>
                                     <TableCell align="left">
                                         { username !== fillup.username ?
                                         <></> : 
                                         <>
                                             <Link
-                                                color="textPrimary"
-                                                href={'/fillups/edit/' + fillup.id}
+                                                to={'/fillups/edit/' + fillup.id}
                                                 className={classes.link}
                                             >
                                                 <EditIcon color="primary"></EditIcon>
                                             </Link>
                                             <Link
-                                                color="textPrimary"
-                                                href={'/fillups/delete/' + fillup.id}
+                                                to={'/fillups/delete/' + fillup.id}
                                                 className={classes.link}
                                             >
                                                 <DeleteForeverIcon color="primary"></DeleteForeverIcon>

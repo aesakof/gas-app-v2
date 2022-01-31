@@ -3,7 +3,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-
+from .permissions import IsOwner
 from gas_app.models import Car, Fillup
 from .serializers import CarSerializer, FillupSerializer
 from django.shortcuts import get_object_or_404
@@ -23,10 +23,12 @@ class FillupViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy', 'create']:
-            self.permission_classes = [IsAuthenticated, ]
+        if self.action in ['update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsAuthenticated, IsOwner]
+        elif self.action in ['create']:
+            self.permission_classes = [IsAuthenticated]
         else:
-            self.permission_classes = [AllowAny, ]
+            self.permission_classes = [AllowAny]
         return super().get_permissions()
 
 
@@ -45,10 +47,12 @@ class CarViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy', 'create']:
-            self.permission_classes = [IsAuthenticated, ]
+        if self.action in ['update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsAuthenticated, IsOwner]
+        elif self.action in ['create']:
+            self.permission_classes = [IsAuthenticated]
         else:
-            self.permission_classes = [AllowAny, ]
+            self.permission_classes = [AllowAny]
         return super().get_permissions()
 
 

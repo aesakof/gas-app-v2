@@ -30,6 +30,15 @@ axiosInstance.interceptors.response.use(
 			return Promise.reject(error);
 		}
 
+        if (
+            error.response.status === 401 &&
+            error.response.data.detail === 'Authentication credentials were not provided.'
+        ) {
+            console.log('You are not logged in. Redirecting...');
+            window.location.href = '/login/';
+            return Promise.reject(error);
+        }
+
 		if (
 			error.response.status === 401 &&
 			originalRequest.url === baseURL + 'token/refresh/'

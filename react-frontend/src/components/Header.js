@@ -37,10 +37,6 @@ const getHeaders = (username) => {
             label: "All Cars",
             href: "/cars",
         },
-        // {
-        //     label: "My Profile",
-        //     href: "/account",
-        // }
     ]
     if(!username) {
         return [
@@ -84,7 +80,13 @@ export default function Header() {
 
     const { header, logo, menuButton, toolbar, drawerContainer } = useStyles();
 
-    const { username } = useContext(Context);
+    const { username, setUsername } = useContext(Context);
+
+    useEffect(() => {
+        if(username === null && localStorage.getItem('username') !== null) {
+            setUsername(localStorage.getItem('username'))
+        }
+    }, [username]);
 
     useEffect(() => {
         const setResponsiveness = () => {

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axiosInstance from '../axios';
 import { useHistory, useParams } from 'react-router-dom';
+import { Context } from '../Context';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -45,6 +46,8 @@ export default function CreateFillup() {
 
 	const [formData, updateFormData] = useState(initialFormData);
 
+    const { username } = useContext(Context);
+
     useEffect(() => {
         axiosInstance.get('/fillups/' + id).then((res) => {
             updateFormData({
@@ -55,7 +58,9 @@ export default function CreateFillup() {
                 ['gallons']: res.data.gallons,
                 ['car']: res.data.car,
             });
-            console.log(res.data);
+            if(username !== res.data.username) {
+                window.location.href = '/fillups';
+            }
         });
     }, []);
 
