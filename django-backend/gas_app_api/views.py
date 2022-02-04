@@ -23,7 +23,7 @@ class FillupViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy']:
+        if self.action in ['update', 'partial_update', 'destroy', 'retrieve']:
             self.permission_classes = [IsAuthenticated, IsOwner]
         elif self.action in ['create']:
             self.permission_classes = [IsAuthenticated]
@@ -47,7 +47,7 @@ class CarViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_permissions(self):
-        if self.action in ['update', 'partial_update', 'destroy']:
+        if self.action in ['update', 'partial_update', 'destroy', 'retrieve']:
             self.permission_classes = [IsAuthenticated, IsOwner]
         elif self.action in ['create']:
             self.permission_classes = [IsAuthenticated]

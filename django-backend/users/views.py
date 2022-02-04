@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny
 
 
 @api_view()
-def CheckAuthentication(request):
+def CheckAuthUser(request):
     if request.user.is_authenticated:
         return Response({
             "message": "Authenticated",

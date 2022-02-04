@@ -46,22 +46,57 @@ export default function EditCar() {
 
 	const [formData, updateFormData] = useState(initialFormData);
 
-    const { username } = useContext(Context);
+    const { username, setUsername } = useContext(Context);
 
     useEffect(() => {
-        axiosInstance.get('/cars/' + id).then((res) => {
-            updateFormData({
-                ...formData,
-                ['car_name']: res.data.name,
-                ['make']: res.data.make,
-                ['model']: res.data.model,
-                ['model_year']: res.data.model_year,
-                ['status']: res.data.status,
+        if(username === null && localStorage.getItem('username') === null) {
+            history.push('/cars')
+        } else {
+            Promise.all([
+                axiosInstance.get('/user/checkauthuser/'),
+                axiosInstance.get('/cars/' + id)
+            ]).then(function ([res1, res2]) {
+                if(res1.data.username !== username || res1.data.username !== localStorage.getItem('username')) {
+                    setUsername(res1.data.username)
+                    localStorage.setItem('username')
+                }
+
+                if(res1.data.username === res2.data.username) {
+                    updateFormData({
+                        ...formData,
+                        ['car_name']: res2.data.name,
+                        ['make']: res2.data.make,
+                        ['model']: res2.data.model,
+                        ['model_year']: res2.data.model_year,
+                        ['status']: res2.data.status,
+                    });
+                } else {
+                    history.push('/cars');
+                }
+
             });
-            if(username !== res.data.username) {
-                window.location.href = '/cars';
-            }
-        });
+
+
+            // axiosInstance.get('/user/checkauthuser/').then((res1) => {
+            //     if(username !== res1.data.username || localStorage.getItem('username') !== res1.data.username) {
+            //         setUsername(res1.data.username);
+            //         localStorage.setItem('username', res1.data.username);
+            //     }
+            //     axiosInstance.get('/cars/' + id).then((res2) => {
+            //         updateFormData({
+            //             ...formData,
+            //             ['car_name']: res2.data.name,
+            //             ['make']: res2.data.make,
+            //             ['model']: res2.data.model,
+            //             ['model_year']: res2.data.model_year,
+            //             ['status']: res2.data.status,
+            //         });
+            //         if(username !== res2.data.username) {
+            //             history.push('/cars');
+            //         }
+            //     });
+            // })
+        }
     }, []);
 
 	const handleChange = (e) => {
