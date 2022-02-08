@@ -14,6 +14,7 @@ import DeleteCar from "./components/DeleteCar"
 import CreateFillup from "./components/CreateFillup"
 import EditFillup from "./components/EditFillup"
 import DeleteFillup from "./components/DeleteFillup"
+import PageNotFound from './components/PageNotFound';
 
 
 
@@ -36,6 +37,8 @@ function App() {
                 <Route exact path="/fillups/new" component={CreateFillup} />
                 <Route exact path="/fillups/edit/:id" component={EditFillup} />
                 <Route exact path="/fillups/delete/:id" component={DeleteFillup} />
+
+                <Route component={PageNotFound} />
             </Switch>
             <Footer />
         </div>

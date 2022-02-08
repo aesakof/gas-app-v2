@@ -193,6 +193,8 @@ Install dependencies for the frontend:
     npm install react-router-dom
     npm install @material-ui/core
     npm install @material-ui/icons
+    npm install @mui/material @emotion/react @emotion/styled
+
 
 
 DO OTHER FRONT END SET UP STUFF

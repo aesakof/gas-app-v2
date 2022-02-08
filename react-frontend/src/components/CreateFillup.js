@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import axiosInstance from '../axios';
+import React, { useState, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import axiosInstance from '../axios';
+import { Context } from '../Context';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -10,6 +11,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -43,6 +48,20 @@ export default function CreateFillup() {
 	});
 
 	const [formData, updateFormData] = useState(initialFormData);
+    const [cars, setCars] = useState(null)
+
+    const { username } = useContext(Context);
+
+    useEffect(() => {
+        if(!username) {
+            history.push('/login/');
+        } else {
+            axiosInstance.get('/cars/?user__user_name=' + username).then((res) => {
+                setCars(res.data);
+                console.log(res.data);
+            });
+        }
+    }, []);
 
 	const handleChange = (e) => {
         updateFormData({
@@ -52,17 +71,23 @@ export default function CreateFillup() {
         });
 	};
 
+    const handleCarChange = (e) => {
+        updateFormData({
+            ...formData,
+            // Trimming any whitespace
+            [e.target.name]: e.target.value,
+        });
+	};
+
 	const handleSubmit = (e) => {
-        console.log(localStorage.getItem('access_token'));
 		e.preventDefault();
 		axiosInstance
 			.post('/fillups/', {
-                // user: 1,
                 date: formData.date,
                 price_per_gallon: parseFloat(formData.price_per_gallon),
                 trip_distance: parseFloat(formData.trip_distance),
                 gallons: parseFloat(formData.gallons),
-                car: 1
+                car: formData.car
 			})
 			.then((res) => {
 				history.push('/fillups/');
@@ -130,17 +155,25 @@ export default function CreateFillup() {
 							/>
 						</Grid>
                         <Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="car"
-								label="Car"
-								name="car"
-								autoComplete="car"
-								onChange={handleChange}
-							/>
-						</Grid>
+                            <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                <InputLabel>Car</InputLabel>
+                                <Select
+                                    required
+                                    onChange={handleCarChange}
+                                    id="car"
+                                    label="Car"
+                                    name="car"
+                                    autoComplete="car"
+                                >
+                                    { cars === null ? 
+                                    <MenuItem value=""><em>None</em></MenuItem> : 
+                                    cars.map((car) => (
+                                        <MenuItem value={car.id}>{car.name}</MenuItem>
+                                    ))
+                                    }
+                                </Select>
+                            </FormControl>
+                        </Grid>
 					</Grid>
 					<Button
 						type="submit"
