@@ -74,10 +74,16 @@ export default function CreateFillup() {
     const handleCarChange = (e) => {
         updateFormData({
             ...formData,
-            // Trimming any whitespace
             [e.target.name]: e.target.value,
         });
 	};
+
+    const handleDateChange = (date) => {
+        updateFormData({
+            ...formData,
+            date: date
+        });
+    };
 
 	const handleSubmit = (e) => {
 		e.preventDefault();

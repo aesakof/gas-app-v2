@@ -15,6 +15,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import Moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -70,10 +78,6 @@ export default function CreateFillup() {
         });
     }, []);
 
-    useEffect(() => {
-        
-    }, [])
-
 	const handleChange = (e) => {
         updateFormData({
             ...formData,
@@ -85,10 +89,18 @@ export default function CreateFillup() {
     const handleCarChange = (e) => {
         updateFormData({
             ...formData,
-            // Trimming any whitespace
             [e.target.name]: e.target.value,
         });
 	};
+
+    const handleDateChange = (date) => {
+        const formattedDate = Moment(date).format('YYYY-MM-DD');
+        console.log(formattedDate);
+        updateFormData({
+            ...formData,
+            date: formattedDate
+        });
+    };
 
 	const handleSubmit = (e) => {
         console.log(localStorage.getItem('access_token'));
@@ -120,7 +132,26 @@ export default function CreateFillup() {
 				<form className={classes.form} noValidate>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<TextField
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <Grid container justifyContent="space-around">
+                                    <KeyboardDatePicker
+                                        fullWidth
+                                        disableToolbar
+                                        inputVariant="outlined"
+                                        format="MM/dd/yyyy"
+                                        margin="normal"
+                                        id="date-picker-inline"
+                                        label="Date of Fillup"
+                                        name="date"
+                                        value={formData.date}
+                                        onChange={handleDateChange}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                    }}
+                                    />
+                                </Grid>
+                            </MuiPickersUtilsProvider>
+							{/* <TextField
 								variant="outlined"
 								required
 								fullWidth
@@ -130,7 +161,7 @@ export default function CreateFillup() {
 								autoComplete="date"
                                 value={formData.date}
 								onChange={handleChange}
-							/>
+							/> */}
 						</Grid>
 						<Grid item xs={12}>
 							<TextField

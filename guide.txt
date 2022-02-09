@@ -194,7 +194,9 @@ Install dependencies for the frontend:
     npm install @material-ui/core
     npm install @material-ui/icons
     npm install @mui/material @emotion/react @emotion/styled
-
+    npm i @date-io/date-fns@1.x date-fns
+    npm i @material-ui/pickers
+    npm install --save moment
 
 
 DO OTHER FRONT END SET UP STUFF
