@@ -48,13 +48,13 @@ export default function CreateFillup() {
 
     const history = useHistory();
     const { id } = useParams();
-	const initialFormData = Object.freeze({
-        date: '',
+	const initialFormData = {
+        date: Moment().format('YYYY-MM-DD 12:00:00'),
         price_per_gallon: '',
         trip_distance: '',
         gallons: '',
         car: ''
-	});
+	};
 
 	const [formData, updateFormData] = useState(initialFormData);
     const [cars, setCars] = useState(null)
@@ -68,7 +68,7 @@ export default function CreateFillup() {
         ]).then(function ([res1, res2]) {
             updateFormData({
                 ...formData,
-                'date': res1.data.date,
+                'date': Moment(res1.data.date).format('YYYY-MM-DD 12:00:00'),
                 'price_per_gallon': res1.data.price_per_gallon,
                 'trip_distance': res1.data.trip_distance,
                 'gallons': res1.data.gallons,
@@ -94,21 +94,18 @@ export default function CreateFillup() {
 	};
 
     const handleDateChange = (date) => {
-        const formattedDate = Moment(date).format('YYYY-MM-DD');
-        console.log(formattedDate);
         updateFormData({
             ...formData,
-            date: formattedDate
+            date: date
         });
     };
 
 	const handleSubmit = (e) => {
-        console.log(localStorage.getItem('access_token'));
 		e.preventDefault();
 		axiosInstance
             .put('/fillups/' + id + '/', {
                 // username: 1,
-                date: formData.date,
+                date: Moment(formData.date).format('yyyy-MM-DD'),
                 price_per_gallon: parseFloat(formData.price_per_gallon),
                 trip_distance: parseFloat(formData.trip_distance),
                 gallons: parseFloat(formData.gallons),
@@ -138,7 +135,7 @@ export default function CreateFillup() {
                                         fullWidth
                                         disableToolbar
                                         inputVariant="outlined"
-                                        format="MM/dd/yyyy"
+                                        format="yyyy-MM-dd"
                                         margin="normal"
                                         id="date-picker-inline"
                                         label="Date of Fillup"
@@ -151,17 +148,6 @@ export default function CreateFillup() {
                                     />
                                 </Grid>
                             </MuiPickersUtilsProvider>
-							{/* <TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="date"
-								label="Date"
-								name="date"
-								autoComplete="date"
-                                value={formData.date}
-								onChange={handleChange}
-							/> */}
 						</Grid>
 						<Grid item xs={12}>
 							<TextField

@@ -11,6 +11,10 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -150,17 +154,22 @@ export default function EditCar() {
 							/>
 						</Grid>
                         <Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="status"
-								label="Status"
-								name="status"
-								autoComplete="status"
-                                value={formData.status}
-								onChange={handleChange}
-							/>
+                            <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                <InputLabel>Status</InputLabel>
+                                <Select
+                                    required
+                                    onChange={handleChange}
+                                    id="status"
+                                    label="status"
+                                    name="status"
+                                    autoComplete="status"
+                                    value={formData.status}
+
+                                >
+                                    <MenuItem value="Active">Active</MenuItem>
+                                    <MenuItem value="Inactive">Inactive</MenuItem>
+                                </Select>
+                            </FormControl>
 						</Grid>
 					</Grid>
 					<Button

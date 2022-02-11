@@ -15,6 +15,15 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import Moment from 'moment';
+
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -39,13 +48,13 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateFillup() {
 
     const history = useHistory();
-	const initialFormData = Object.freeze({
-        date: '',
+	const initialFormData = {
+        date: Moment().format('YYYY-MM-DD 12:00:00'),
         price_per_gallon: '',
         trip_distance: '',
         gallons: '',
         car: ''
-	});
+	};
 
 	const [formData, updateFormData] = useState(initialFormData);
     const [cars, setCars] = useState(null)
@@ -58,7 +67,6 @@ export default function CreateFillup() {
         } else {
             axiosInstance.get('/cars/?user__user_name=' + username).then((res) => {
                 setCars(res.data);
-                console.log(res.data);
             });
         }
     }, []);
@@ -89,7 +97,7 @@ export default function CreateFillup() {
 		e.preventDefault();
 		axiosInstance
 			.post('/fillups/', {
-                date: formData.date,
+                date: Moment(formData.date).format('yyyy-MM-DD'),
                 price_per_gallon: parseFloat(formData.price_per_gallon),
                 trip_distance: parseFloat(formData.trip_distance),
                 gallons: parseFloat(formData.gallons),
@@ -113,16 +121,25 @@ export default function CreateFillup() {
 				<form className={classes.form} noValidate>
 					<Grid container spacing={2}>
 						<Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="date"
-								label="Date"
-								name="date"
-								autoComplete="date"
-								onChange={handleChange}
-							/>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <Grid container justifyContent="space-around">
+                                    <KeyboardDatePicker
+                                        fullWidth
+                                        disableToolbar
+                                        inputVariant="outlined"
+                                        format="yyyy-MM-dd"
+                                        margin="normal"
+                                        id="date-picker-inline"
+                                        label="Date of Fillup"
+                                        name="date"
+                                        value={formData.date}
+                                        onChange={handleDateChange}
+                                        KeyboardButtonProps={{
+                                            'aria-label': 'change date',
+                                    }}
+                                    />
+                                </Grid>
+                            </MuiPickersUtilsProvider>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
