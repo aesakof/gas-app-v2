@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import axiosInstance from '../axios';
 import { useHistory, useParams } from 'react-router-dom';
 import { Context } from '../Context';
+
+import { range } from '../helpers';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -50,6 +52,8 @@ export default function EditCar() {
 
 	const [formData, updateFormData] = useState(initialFormData);
 
+    const model_year_range = range(1990, new Date().getFullYear() + 1);
+
     const { username, setUsername } = useContext(Context);
 
     useEffect(() => {
@@ -70,6 +74,13 @@ export default function EditCar() {
             ...formData,
             // Trimming any whitespace
             [e.target.name]: e.target.value.trim(),
+        });
+	};
+
+    const handleSelectChange = (year) => {
+        updateFormData({
+            ...formData,
+            [year.target.name]: year.target.value
         });
 	};
 
@@ -141,17 +152,24 @@ export default function EditCar() {
 							/>
 						</Grid>
                         <Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="model_year"
-								label="Model Year"
-								name="model_year"
-								autoComplete="model_year"
-                                value={formData.model_year}
-								onChange={handleChange}
-							/>
+                            <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                <InputLabel>Model Year</InputLabel>
+                                <Select
+                                    required
+                                    onChange={handleSelectChange}
+                                    id="model_year"
+                                    label="Model Year"
+                                    name="model_year"
+                                    autoComplete="model_year"
+                                    value={formData.model_year}
+                                >
+                                    {
+                                    model_year_range.map((year) => (
+                                        <MenuItem value={year}>{year}</MenuItem>
+                                    ))
+                                    }
+                                </Select>
+                            </FormControl>
 						</Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth variant="outlined" className={classes.formControl}>

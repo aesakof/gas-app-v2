@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react';
 import axiosInstance from '../axios';
 import { useHistory } from 'react-router-dom';
 import { Context } from '../Context';
+
+import { range } from '../helpers';
 //MaterialUI
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -39,17 +41,19 @@ const useStyles = makeStyles((theme) => ({
 export default function CreateCar() {
 
     const history = useHistory();
-	const initialFormData = Object.freeze({
+	const initialFormData = {
         car_name: '',
         make: '',
         model: '',
-        model_year: '',
-        status: ''
-	});
+        model_year: new Date().getFullYear(),
+        status: 'Active'
+	};
 
 	const [formData, updateFormData] = useState(initialFormData);
 
     const { username, setUsername } = useContext(Context);
+
+    const model_year_range = range(1990, new Date().getFullYear() + 1);
 
 	const handleChange = (e) => {
         updateFormData({
@@ -59,8 +63,15 @@ export default function CreateCar() {
         });
 	};
 
+    const handleSelectChange = (year) => {
+        updateFormData({
+            ...formData,
+            [year.target.name]: year.target.value
+        });
+	};
+
 	const handleSubmit = (e) => {
-        console.log(localStorage.getItem('access_token'));
+        console.log(formData);
 		e.preventDefault();
 		axiosInstance
 			.post('/cars/', {
@@ -125,16 +136,24 @@ export default function CreateCar() {
 							/>
 						</Grid>
                         <Grid item xs={12}>
-							<TextField
-								variant="outlined"
-								required
-								fullWidth
-								id="model_year"
-								label="Model Year"
-								name="model_year"
-								autoComplete="model_year"
-								onChange={handleChange}
-							/>
+                            <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                <InputLabel>Model Year</InputLabel>
+                                <Select
+                                    required
+                                    onChange={handleSelectChange}
+                                    id="model_year"
+                                    label="Model Year"
+                                    name="model_year"
+                                    autoComplete="model_year"
+                                    value={formData.model_year}
+                                >
+                                    {
+                                    model_year_range.map((year) => (
+                                        <MenuItem value={year}>{year}</MenuItem>
+                                    ))
+                                    }
+                                </Select>
+                            </FormControl>
 						</Grid>
                         <Grid item xs={12}>
                             <FormControl fullWidth variant="outlined" className={classes.formControl}>
@@ -146,6 +165,7 @@ export default function CreateCar() {
                                     label="status"
                                     name="status"
                                     autoComplete="status"
+                                    value={formData.status}
                                 >
                                     <MenuItem value="Active">Active</MenuItem>
                                     <MenuItem value="Inactive">Inactive</MenuItem>

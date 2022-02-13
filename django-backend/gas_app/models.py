@@ -2,12 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import date, datetime
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 
-next_year = datetime.today().year+1
-last_30_years = list(range(next_year-30, next_year))
-MODEL_YEARS = [(i,j) for i,j in zip(last_30_years,last_30_years)]
 
 STATUS = [('Active', 'Active'), ('Inactive', 'Inactive')]
 
@@ -51,7 +48,7 @@ class Car(models.Model):
     name = models.CharField(max_length=25)
     make = models.CharField(max_length=25)
     model = models.CharField(max_length=25)
-    model_year = models.IntegerField(choices=MODEL_YEARS)
+    model_year = models.IntegerField(validators=[MaxValueValidator(datetime.today().year+1)])
     status = models.CharField(max_length=10,choices=STATUS,default='Active')
     objects = models.Manager() # default manager
     carobjects = CarObjects() # custom manager
