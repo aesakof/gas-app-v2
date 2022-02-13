@@ -19,7 +19,6 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import Moment from 'moment';
@@ -62,14 +61,14 @@ export default function CreateFillup() {
     const { username } = useContext(Context);
 
     useEffect(() => {
-        if(!username) {
+        if(!username && !localStorage.getItem('username')) {
             history.push('/login/');
         } else {
             axiosInstance.get('/cars/?user__user_name=' + username).then((res) => {
                 setCars(res.data);
             });
         }
-    }, []);
+    }, [username, history]);
 
 	const handleChange = (e) => {
         updateFormData({
@@ -144,6 +143,7 @@ export default function CreateFillup() {
 						<Grid item xs={12}>
 							<TextField
 								variant="outlined"
+                                type="number"
 								required
 								fullWidth
 								id="price_per_gallon"
@@ -156,6 +156,7 @@ export default function CreateFillup() {
                         <Grid item xs={12}>
 							<TextField
 								variant="outlined"
+                                type="number"
 								required
 								fullWidth
 								id="trip_distance"
@@ -168,6 +169,7 @@ export default function CreateFillup() {
                         <Grid item xs={12}>
 							<TextField
 								variant="outlined"
+                                type="number"
 								required
 								fullWidth
 								id="gallons"

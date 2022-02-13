@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axiosInstance from '../axios';
 import { useHistory } from 'react-router-dom';
 import { Context } from '../Context';
@@ -51,9 +51,15 @@ export default function CreateCar() {
 
 	const [formData, updateFormData] = useState(initialFormData);
 
-    const { username, setUsername } = useContext(Context);
+    const { username } = useContext(Context);
 
     const model_year_range = range(1990, new Date().getFullYear() + 1);
+
+    useEffect(() => {
+        if(!username && !localStorage.getItem('username')) {
+            history.push('/login/');
+        }
+    }, [username, history]);
 
 	const handleChange = (e) => {
         updateFormData({

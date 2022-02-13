@@ -54,8 +54,6 @@ export default function EditCar() {
 
     const model_year_range = range(1990, new Date().getFullYear() + 1);
 
-    const { username, setUsername } = useContext(Context);
-
     useEffect(() => {
         axiosInstance.get('/cars/' + id).then((res) => {
             updateFormData({

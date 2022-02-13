@@ -53,7 +53,7 @@ function Cars() {
     const [cars, setCars] = useState(null)
     const classes = useStyles();
 
-    const { username, setUsername } = useContext(Context);
+    const { username } = useContext(Context);
 
     useEffect(() => {
         axiosInstance.get('/cars/').then((res) => {

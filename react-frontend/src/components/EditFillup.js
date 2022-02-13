@@ -19,7 +19,6 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import Moment from 'moment';
@@ -76,7 +75,7 @@ export default function CreateFillup() {
             });
             setCars(res2.data);
         });
-    }, []);
+    }, [username]);
 
 	const handleChange = (e) => {
         updateFormData({
@@ -152,6 +151,7 @@ export default function CreateFillup() {
 						<Grid item xs={12}>
 							<TextField
 								variant="outlined"
+                                type="number"
 								required
 								fullWidth
 								id="price_per_gallon"
@@ -165,6 +165,7 @@ export default function CreateFillup() {
                         <Grid item xs={12}>
 							<TextField
 								variant="outlined"
+                                type="number"
 								required
 								fullWidth
 								id="trip_distance"
@@ -178,6 +179,7 @@ export default function CreateFillup() {
                         <Grid item xs={12}>
 							<TextField
 								variant="outlined"
+                                type="number"
 								required
 								fullWidth
 								id="gallons"

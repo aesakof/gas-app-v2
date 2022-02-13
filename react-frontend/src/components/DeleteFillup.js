@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import axiosInstance from '../axios';
 import { useHistory, useParams } from 'react-router-dom';
 //MaterialUI
