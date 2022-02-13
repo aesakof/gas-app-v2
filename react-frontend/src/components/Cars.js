@@ -11,7 +11,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
 import Container from '@material-ui/core/Container';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
@@ -111,7 +110,14 @@ function Cars() {
                                     <TableCell>{car.model}</TableCell>
                                     <TableCell>{car.model_year}</TableCell>
                                     <TableCell>{car.status}</TableCell>
-                                    <TableCell>{car.username}</TableCell>
+                                    <TableCell>
+                                        <Link
+                                            to={'/' + car.username}
+                                            className={classes.link}
+                                        >
+                                            {car.username}
+                                        </Link>
+                                    </TableCell>
                                     <TableCell>{car.total_distance}</TableCell>
                                     <TableCell>{car.first_fillup}</TableCell>
                                     <TableCell>{car.last_fillup}</TableCell>

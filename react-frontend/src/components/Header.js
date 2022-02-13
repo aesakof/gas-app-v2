@@ -63,7 +63,7 @@ const getHeaders = (username) => {
             },
             {
                 label: username,
-                href: "/profile",
+                href: "/" + username,
             },
             {
                 label: "Log Out",
