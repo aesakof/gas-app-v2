@@ -15,7 +15,7 @@ class FillupViewSet(viewsets.ModelViewSet):
     serializer_class = FillupSerializer
     lookup_field = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('user__user_name',)
+    filterset_fields = ('user__user_name','date')
 
     queryset = Fillup.objects.all()
 
@@ -36,7 +36,7 @@ class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     lookup_field = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('user__user_name',)
+    filterset_fields = ('user__user_name','status',)
 
     queryset = Car.objects.all()
 

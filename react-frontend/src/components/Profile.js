@@ -17,6 +17,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import Button from '@material-ui/core/Button';
 
+import ProfileTabs from './ProfileTabs';
+
 
 const useStyles = makeStyles((theme) => ({
 	cardMedia: {
@@ -62,7 +64,7 @@ export default function Profile() {
     useEffect(() => {
         Promise.all([
             axiosInstance.get('/fillups/?user__user_name=' + user),
-            axiosInstance.get('/cars/?user__user_name=' + user)
+            axiosInstance.get('/cars/?status=Active&user__user_name=' + user)
         ]).then(function ([res1, res2]) {
             console.log(res2.data);
             setFillups(res1.data)
@@ -73,11 +75,13 @@ export default function Profile() {
 	return (
         <>
         <h1>{user}'s Profile</h1>
+        <ProfileTabs />
         {
             cars === null ?
             <h5>Loading cars data...</h5> :
 
             <Container maxWidth="xl" component="main">
+                <h2>{username}'s Active Cars</h2>
                 { !username ?
                 <></> :
                 <Link to={'/cars/register'}>
@@ -155,11 +159,13 @@ export default function Profile() {
 
             
         }
+        <br></br>
+        <br></br>
         {
             fillups === null ?
             <h5>Loading fillups data...</h5> :
 
-            <Container maxWidth="lg" component="main">
+            <Container maxWidth="xl" component="main">
                 { !username ?
                 <></> :
                 <Link to={'/fillups/new'}>
