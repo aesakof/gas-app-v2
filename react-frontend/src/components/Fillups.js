@@ -49,99 +49,83 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function Fillups() {
-    const [fillups, setFillups] = useState(null)
+export default function Fillups(props) {
     const classes = useStyles();
 
-    const { username, setUsername } = useContext(Context);
-
-    useEffect(() => {
-        axiosInstance.get('/fillups/').then((res) => {
-            setFillups(res.data)
-        });
-    }, [])
+    const { username } = useContext(Context);
 
     return (
-        <>
-        {
-            fillups === null ?
-            <h5>Loading fillups data...</h5> :
-
-            <Container maxWidth="lg" component="main">
-                { !username ?
-                <></> :
-                <Link to={'/fillups/new'}>
-                    <Button
-                        className={classes.button}
-                        variant="contained"
-                        color="primary"
-                    >
-                        Enter New Fillup
-                    </Button>
-                </Link>}
-                <br></br>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Date</TableCell>
-                                <TableCell>Price Per Gallon</TableCell>
-                                <TableCell>Trip Distance</TableCell>
-                                <TableCell>Gallons</TableCell>
-                                <TableCell>Car</TableCell>
-                                <TableCell>Total Sale</TableCell>
-                                <TableCell>MPG</TableCell>
-                                <TableCell>Username</TableCell>
-                                <TableCell>Action</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {fillups.map((fillup) => (
-                                <TableRow key={fillup.date}>
-                                    <TableCell component="th" scope="row">
-                                        {fillup.date}
-                                    </TableCell>
-                                    <TableCell>{fillup.price_per_gallon}</TableCell>
-                                    <TableCell>{fillup.trip_distance}</TableCell>
-                                    <TableCell>{fillup.gallons}</TableCell>
-                                    <TableCell>{fillup.car_name}</TableCell>
-                                    <TableCell>{fillup.total_sale}</TableCell>
-                                    <TableCell>{fillup.mpg}</TableCell>
-                                    <TableCell>
+        <Container maxWidth="xl" component="main">
+            { !username ?
+            <></> :
+            <Link to={'/fillups/new'}>
+                <Button
+                    className={classes.button}
+                    variant="contained"
+                    color="primary"
+                >
+                    Enter New Fillup
+                </Button>
+            </Link>}
+            <br></br>
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Date</TableCell>
+                            <TableCell>Price Per Gallon</TableCell>
+                            <TableCell>Trip Distance</TableCell>
+                            <TableCell>Gallons</TableCell>
+                            <TableCell>Car</TableCell>
+                            <TableCell>Total Sale</TableCell>
+                            <TableCell>MPG</TableCell>
+                            <TableCell>Username</TableCell>
+                            <TableCell>Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {props.fillups.map((fillup) => (
+                            <TableRow key={fillup.date}>
+                                <TableCell component="th" scope="row">
+                                    {fillup.date}
+                                </TableCell>
+                                <TableCell>{fillup.price_per_gallon}</TableCell>
+                                <TableCell>{fillup.trip_distance}</TableCell>
+                                <TableCell>{fillup.gallons}</TableCell>
+                                <TableCell>{fillup.car_name}</TableCell>
+                                <TableCell>{fillup.total_sale}</TableCell>
+                                <TableCell>{fillup.mpg}</TableCell>
+                                <TableCell>
+                                    <Link
+                                        to={'/' + fillup.username}
+                                        className={classes.link}
+                                    >
+                                        {fillup.username}
+                                    </Link>
+                                </TableCell>
+                                <TableCell align="left">
+                                    { username !== fillup.username ?
+                                    <></> : 
+                                    <>
                                         <Link
-                                            to={'/' + fillup.username}
+                                            to={'/fillups/edit/' + fillup.id}
                                             className={classes.link}
                                         >
-                                            {fillup.username}
+                                            <EditIcon color="primary"></EditIcon>
                                         </Link>
-                                    </TableCell>
-                                    <TableCell align="left">
-                                        { username !== fillup.username ?
-                                        <></> : 
-                                        <>
-                                            <Link
-                                                to={'/fillups/edit/' + fillup.id}
-                                                className={classes.link}
-                                            >
-                                                <EditIcon color="primary"></EditIcon>
-                                            </Link>
-                                            <Link
-                                                to={'/fillups/delete/' + fillup.id}
-                                                className={classes.link}
-                                            >
-                                                <DeleteForeverIcon color="primary"></DeleteForeverIcon>
-                                            </Link>
-                                        </>}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Container>
-        }
-        </>
+                                        <Link
+                                            to={'/fillups/delete/' + fillup.id}
+                                            className={classes.link}
+                                        >
+                                            <DeleteForeverIcon color="primary"></DeleteForeverIcon>
+                                        </Link>
+                                    </>}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Container>
       );
 }
-
-export default Fillups
