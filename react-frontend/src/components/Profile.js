@@ -14,6 +14,8 @@ import Box from '@material-ui/core/Box';
 import Cars from './Cars';
 import Fillups from './Fillups';
 
+import ProfileOverview from './ProfileOverview';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -39,7 +41,7 @@ export default function Profile() {
     const { username } = useContext(Context);
 
     const classes = useStyles();
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(2);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -48,9 +50,8 @@ export default function Profile() {
     useEffect(() => {
         Promise.all([
             axiosInstance.get('/fillups/?user__user_name=' + user),
-            axiosInstance.get('/cars/?status=Active&user__user_name=' + user)
+            axiosInstance.get('/cars/?user__user_name=' + user)
         ]).then(function ([res1, res2]) {
-            console.log(res2.data);
             setFillups(res1.data)
             setCars(res2.data);
         });
@@ -71,11 +72,13 @@ export default function Profile() {
 
                 <Switch>
                     <Route exact path={`${path}`}>
-                        <h3>Profile dude's overview, man</h3>
+                        <ProfileOverview user={user}/>
                     </Route>
+
                     <Route exact path={`${path}/stats`}>
                         <h3>Profile dude's stats, man</h3>
                     </Route>
+
                     <Route exact path={`${path}/fillups`}>
                         {
                         fillups === null ?
@@ -83,6 +86,7 @@ export default function Profile() {
                         <Fillups fillups={fillups} />
                         }
                     </Route>
+
                     <Route exact path={`${path}/cars`}>
                         {
                         cars === null ?

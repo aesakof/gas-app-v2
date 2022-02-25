@@ -9,13 +9,15 @@ from .serializers import CarSerializer, FillupSerializer
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum, Min, Max, Avg, Count
 from rest_framework.response import Response
+from .filters import CarFilter, FillupFilter
 
 
 class FillupViewSet(viewsets.ModelViewSet):
     serializer_class = FillupSerializer
     lookup_field = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('user__user_name','date')
+    filterset_class = FillupFilter
+    # filterset_fields = ('user__user_name','date')
 
     queryset = Fillup.objects.all()
 
@@ -36,7 +38,8 @@ class CarViewSet(viewsets.ModelViewSet):
     serializer_class = CarSerializer
     lookup_field = "id"
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ('user__user_name','status',)
+    filterset_class = CarFilter
+    # filterset_fields = ('user__user_name','status',)
 
     queryset = Car.objects.all()
 
