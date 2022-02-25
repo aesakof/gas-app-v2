@@ -43,7 +43,7 @@ export default function ProfileOverview(props) {
                 fillups === null ?
                 <h5>Loading fillups data...</h5> :
                 <>
-                    <h2>{username}'s Last Year of Fillups/h2>
+                    <h2>{username}'s Last Year of Fillups</h2>
                     <Fillups fillups={fillups} />
                 </>
                 
