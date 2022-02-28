@@ -19,29 +19,8 @@ import Button from '@material-ui/core/Button';
 
 
 const useStyles = makeStyles((theme) => ({
-	cardMedia: {
-		paddingTop: '56.25%', // 16:9
-	},
 	link: {
 		margin: theme.spacing(1, 1.5),
-	},
-	cardHeader: {
-		backgroundColor:
-			theme.palette.type === 'light'
-				? theme.palette.grey[200]
-				: theme.palette.grey[700],
-	},
-	postTitle: {
-		fontSize: '16px',
-		textAlign: 'left',
-	},
-	postText: {
-		display: 'flex',
-		justifyContent: 'left',
-		alignItems: 'baseline',
-		fontSize: '12px',
-		textAlign: 'left',
-		marginBottom: theme.spacing(2),
 	},
     button: {
         marginTop: '25px',
@@ -96,12 +75,16 @@ export default function Fillups(props) {
                                 <TableCell>{fillup.total_sale}</TableCell>
                                 <TableCell>{fillup.mpg}</TableCell>
                                 <TableCell>
-                                    <Link
-                                        to={'/' + fillup.username}
-                                        className={classes.link}
-                                    >
-                                        {fillup.username}
-                                    </Link>
+                                    {
+                                        props.page == 'profile' ?
+                                        fillup.username :
+                                        <Link
+                                            to={'/' + fillup.username}
+                                            className={classes.link}
+                                        >
+                                            {fillup.username}
+                                        </Link>
+                                    }
                                 </TableCell>
                                 <TableCell align="left">
                                     { username !== fillup.username ?

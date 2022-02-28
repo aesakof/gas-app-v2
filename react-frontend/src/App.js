@@ -17,10 +17,13 @@ import DeleteFillup from "./components/DeleteFillup"
 import PageNotFound from './components/PageNotFound';
 import Profile from './components/Profile';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 
 function App() {
     return (
-        <div>
+        <div style={{backgroundColor: '#D3D3D3'}}>
+            <CssBaseline />
             <Header />
             <h1>Gas App</h1>
             <Switch>
@@ -40,7 +43,6 @@ function App() {
 
                 <Route path="/:user" component={Profile} />
                 
-
                 <Route component={PageNotFound} />
             </Switch>
             <Footer />

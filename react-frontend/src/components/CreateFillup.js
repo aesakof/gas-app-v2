@@ -22,6 +22,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import Moment from 'moment';
+import Paper from '@material-ui/core/Paper';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,10 +31,7 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main,
+        padding: '20px',
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
@@ -110,10 +108,9 @@ export default function CreateFillup() {
 	const classes = useStyles();
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container component={Paper} maxWidth="xs">
 			<CssBaseline />
 			<div className={classes.paper}>
-				<Avatar className={classes.avatar}></Avatar>
 				<Typography component="h1" variant="h5">
 					Enter New Fillup
 				</Typography>

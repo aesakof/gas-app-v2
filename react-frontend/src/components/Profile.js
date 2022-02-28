@@ -1,26 +1,23 @@
 import { React, useEffect, useState, useContext } from 'react';
-import { useParams, useRouteMatch, Link, Route, Switch } from 'react-router-dom';
-import axiosInstance from '../axios';
+import { useParams, useRouteMatch, useLocation, Link, Route, Switch } from 'react-router-dom';
 import { Context } from "../Context";
 
 import { makeStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-
-import Cars from './Cars';
-import Fillups from './Fillups';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import ProfileOverview from './ProfileOverview';
+import ProfileCars from './ProfileCars';
+import ProfileFillups from './ProfileFillups';
+import ProfileStats from './ProfileStats';
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
     },
 }));
 
@@ -33,6 +30,9 @@ function a11yProps(index) {
 
 export default function Profile() {
 
+    const location = useLocation();
+    console.log('Location=' + location.pathname.split("/")[2]);
+
     const { user } = useParams();
     let { path, url } = useRouteMatch();
 
@@ -40,27 +40,45 @@ export default function Profile() {
     const [fillups, setFillups] = useState(null)
     const { username } = useContext(Context);
 
+    const locationToValue = (location) => {
+        switch(location) {
+            case 'stats':
+                return 1;
+            case 'fillups':
+                return 2;
+            case 'cars':
+                return 3;
+            default:
+                return 0;
+        }
+
+    };
+
     const classes = useStyles();
-    const [value, setValue] = useState(2);
+    const [value, setValue] = useState(locationToValue(location.pathname.split("/")[2]));
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     useEffect(() => {
-        Promise.all([
-            axiosInstance.get('/fillups/?user__user_name=' + user),
-            axiosInstance.get('/cars/?user__user_name=' + user)
-        ]).then(function ([res1, res2]) {
-            setFillups(res1.data)
-            setCars(res2.data);
-        });
-    }, [user]);
+        // Promise.all([
+        //     axiosInstance.get('/fillups/?user__user_name=' + user),
+        //     axiosInstance.get('/cars/?user__user_name=' + user)
+        // ]).then(function ([res1, res2]) {
+        //     setFillups(res1.data)
+        //     setCars(res2.data);
+        // });
+        console.log('Value=' + value);
+        console.log('Path=' + path);
+        console.log('URL=' + url);
+    }, [value]);
 
 	return (
-        <>
+        <Container component="main">
+            <CssBaseline />
             <h1>{user}'s Profile</h1>
-            <div className={classes.root}>
+            <div>
                 <AppBar position="static">
                     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
                         <Tab label="Overview" component={Link} to={`${url}`} {...a11yProps(0)} />
@@ -72,33 +90,22 @@ export default function Profile() {
 
                 <Switch>
                     <Route exact path={`${path}`}>
-                        <ProfileOverview user={user}/>
+                        <ProfileOverview user={user} />
                     </Route>
 
                     <Route exact path={`${path}/stats`}>
-                        <h3>Profile dude's stats, man</h3>
+                        <ProfileStats user={user} />
                     </Route>
 
                     <Route exact path={`${path}/fillups`}>
-                        {
-                        fillups === null ?
-                        <h5>Loading fillups data...</h5> :
-                        <Fillups fillups={fillups} />
-                        }
+                        <ProfileFillups user={user} />
                     </Route>
 
                     <Route exact path={`${path}/cars`}>
-                        {
-                        cars === null ?
-                        <h5>Loading cars data...</h5> :
-                        <>
-                            <h2>{username}'s Active Cars</h2>
-                            <Cars cars={cars} />
-                        </>
-                        }
+                        <ProfileCars user={user} />
                     </Route>
                 </Switch>
             </div>
-        </>
+        </Container>
     )
 }

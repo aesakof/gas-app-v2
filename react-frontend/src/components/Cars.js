@@ -17,29 +17,8 @@ import Button from '@material-ui/core/Button';
 
 
 const useStyles = makeStyles((theme) => ({
-	cardMedia: {
-		paddingTop: '56.25%', // 16:9
-	},
 	link: {
 		margin: theme.spacing(1, 1.5),
-	},
-	cardHeader: {
-		backgroundColor:
-			theme.palette.type === 'light'
-				? theme.palette.grey[200]
-				: theme.palette.grey[700],
-	},
-	postTitle: {
-		fontSize: '16px',
-		textAlign: 'left',
-	},
-	postText: {
-		display: 'flex',
-		justifyContent: 'left',
-		alignItems: 'baseline',
-		fontSize: '12px',
-		textAlign: 'left',
-		marginBottom: theme.spacing(2),
 	},
     button: {
         marginTop: '25px',
@@ -97,12 +76,16 @@ export default function Cars(props) {
                                 <TableCell>{car.model_year}</TableCell>
                                 <TableCell>{car.status}</TableCell>
                                 <TableCell>
-                                    <Link
-                                        to={'/' + car.username}
-                                        className={classes.link}
-                                    >
-                                        {car.username}
-                                    </Link>
+                                    {
+                                        props.page == 'profile' ?
+                                        car.username :
+                                        <Link
+                                            to={'/' + car.username}
+                                            className={classes.link}
+                                        >
+                                            {car.username}
+                                        </Link>
+                                    }
                                 </TableCell>
                                 <TableCell>{car.total_distance}</TableCell>
                                 <TableCell>{car.first_fillup}</TableCell>
