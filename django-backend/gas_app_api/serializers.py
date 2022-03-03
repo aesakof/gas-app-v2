@@ -8,7 +8,7 @@ class FillupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Fillup
-        fields = ('id', 'date', 'price_per_gallon', 'trip_distance', 'gallons', 'car_name', 'car', 'total_sale', 'mpg', 'username')
+        fields = ('id', 'date', 'price_per_gallon', 'trip_distance', 'gallons', 'car_name', 'car', 'fuel_grade', 'total_sale', 'mpg', 'username')
 
 
 class CarSerializer(serializers.ModelSerializer):

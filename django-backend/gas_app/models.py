@@ -7,6 +7,7 @@ from django.conf import settings
 
 
 STATUS = [('Active', 'Active'), ('Inactive', 'Inactive')]
+FUEL_GRADE = [('Regular', 'Regular'), ('Mid-grade', 'Mid-grade'), ('Premium', 'Premium'), ('Diesel', 'Diesel')]
 
 class Fillup(models.Model):
 
@@ -20,6 +21,7 @@ class Fillup(models.Model):
     trip_distance = models.FloatField(validators=[MinValueValidator(0.0)])
     gallons = models.FloatField(validators=[MinValueValidator(0.0)])
     car = models.ForeignKey('Car',on_delete=models.CASCADE, related_name='fillups')
+    fuel_grade = models.CharField(max_length=10, choices=FUEL_GRADE, default='Regular')
     objects = models.Manager() # default manager
     fillupobjects = FillupObjects() # custom manager
 

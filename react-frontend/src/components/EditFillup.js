@@ -3,7 +3,6 @@ import axiosInstance from '../axios';
 import { useHistory, useParams } from 'react-router-dom';
 import { Context } from '../Context';
 //MaterialUI
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -22,6 +21,8 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import Moment from 'moment';
+import Paper from '@material-ui/core/Paper';
+
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -29,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
+        padding: '20px',
 	},
 	avatar: {
 		margin: theme.spacing(1),
@@ -49,6 +51,7 @@ export default function CreateFillup() {
     const { id } = useParams();
 	const initialFormData = {
         date: Moment().format('YYYY-MM-DD 12:00:00'),
+        fuel_grade: '',
         price_per_gallon: '',
         trip_distance: '',
         gallons: '',
@@ -68,6 +71,7 @@ export default function CreateFillup() {
             updateFormData({
                 ...formData,
                 'date': Moment(res1.data.date).format('YYYY-MM-DD 12:00:00'),
+                'fuel_grade': res1.data.fuel_grade,
                 'price_per_gallon': res1.data.price_per_gallon,
                 'trip_distance': res1.data.trip_distance,
                 'gallons': res1.data.gallons,
@@ -105,6 +109,7 @@ export default function CreateFillup() {
             .put('/fillups/' + id + '/', {
                 // username: 1,
                 date: Moment(formData.date).format('yyyy-MM-DD'),
+                fuel_grade: formData.fuel_grade,
                 price_per_gallon: parseFloat(formData.price_per_gallon),
                 trip_distance: parseFloat(formData.trip_distance),
                 gallons: parseFloat(formData.gallons),
@@ -118,10 +123,9 @@ export default function CreateFillup() {
 	const classes = useStyles();
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container component={Paper} maxWidth="xs">
 			<CssBaseline />
 			<div className={classes.paper}>
-				<Avatar className={classes.avatar}></Avatar>
 				<Typography component="h1" variant="h5">
 					Edit Fillup
 				</Typography>
@@ -147,6 +151,25 @@ export default function CreateFillup() {
                                     />
                                 </Grid>
                             </MuiPickersUtilsProvider>
+						</Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                <InputLabel>Fuel Grade</InputLabel>
+                                <Select
+                                    required
+                                    onChange={handleChange}
+                                    id="fuel_grade"
+                                    label="fuel_grade"
+                                    name="fuel_grade"
+                                    autoComplete="fuel_grade"
+                                    value={formData.fuel_grade}
+                                >
+                                    <MenuItem value="Regular">Regular</MenuItem>
+                                    <MenuItem value="Mid-grade">Mid-grade</MenuItem>
+                                    <MenuItem value="Premium">Premium</MenuItem>
+                                    <MenuItem value="Diesel">Diesel</MenuItem>
+                                </Select>
+                            </FormControl>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField

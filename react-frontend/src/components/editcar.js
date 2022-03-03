@@ -5,7 +5,6 @@ import { Context } from '../Context';
 
 import { range } from '../helpers';
 //MaterialUI
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -17,6 +16,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Paper from '@material-ui/core/Paper';
+
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
+        padding: '20px',
 	},
 	avatar: {
 		margin: theme.spacing(1),
@@ -101,10 +103,9 @@ export default function EditCar() {
 	const classes = useStyles();
 
 	return (
-		<Container component="main" maxWidth="xs">
+		<Container component={Paper} maxWidth="xs">
 			<CssBaseline />
 			<div className={classes.paper}>
-				<Avatar className={classes.avatar}></Avatar>
 				<Typography component="h1" variant="h5">
 					Edit Car
 				</Typography>

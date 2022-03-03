@@ -7,6 +7,9 @@ import Fillups from './Fillups';
 
 import Moment from 'moment';
 
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+
 
 export default function ProfileOverview(props) {
 
@@ -29,6 +32,16 @@ export default function ProfileOverview(props) {
 
 	return (
         <>
+            <h2>Overview Stats</h2>
+            <Container maxWidth="md" component={Paper}>
+                <h2>Overview Stats</h2>
+                <p># Cars Owned: </p>
+                <p># Fillups Made: </p>
+                <p>Total Distance Drive: </p>
+                <p>Total Gallons Filled: </p>
+                <p>Total $ Spent: </p>
+                <p>Average MPG: </p>
+            </Container>
             {
                 cars === null ?
                 <h5>Loading cars data...</h5> :

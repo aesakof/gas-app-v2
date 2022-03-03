@@ -56,6 +56,7 @@ export default function Fillups(props) {
                             <TableCell>Trip Distance</TableCell>
                             <TableCell>Gallons</TableCell>
                             <TableCell>Car</TableCell>
+                            <TableCell>Fuel Grade</TableCell>
                             <TableCell>Total Sale</TableCell>
                             <TableCell>MPG</TableCell>
                             <TableCell>Username</TableCell>
@@ -72,6 +73,7 @@ export default function Fillups(props) {
                                 <TableCell>{fillup.trip_distance}</TableCell>
                                 <TableCell>{fillup.gallons}</TableCell>
                                 <TableCell>{fillup.car_name}</TableCell>
+                                <TableCell>{fillup.fuel_grade}</TableCell>
                                 <TableCell>{fillup.total_sale}</TableCell>
                                 <TableCell>{fillup.mpg}</TableCell>
                                 <TableCell>

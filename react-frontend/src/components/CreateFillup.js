@@ -47,6 +47,7 @@ export default function CreateFillup() {
     const history = useHistory();
 	const initialFormData = {
         date: Moment().format('YYYY-MM-DD 12:00:00'),
+        fuel_grade: '',
         price_per_gallon: '',
         trip_distance: '',
         gallons: '',
@@ -95,6 +96,7 @@ export default function CreateFillup() {
 		axiosInstance
 			.post('/fillups/', {
                 date: Moment(formData.date).format('yyyy-MM-DD'),
+                fuel_grade: formData.fuel_grade,
                 price_per_gallon: parseFloat(formData.price_per_gallon),
                 trip_distance: parseFloat(formData.trip_distance),
                 gallons: parseFloat(formData.gallons),
@@ -136,6 +138,25 @@ export default function CreateFillup() {
                                     />
                                 </Grid>
                             </MuiPickersUtilsProvider>
+						</Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth variant="outlined" className={classes.formControl}>
+                                <InputLabel>Fuel Grade</InputLabel>
+                                <Select
+                                    required
+                                    onChange={handleChange}
+                                    id="fuel_grade"
+                                    label="fuel_grade"
+                                    name="fuel_grade"
+                                    autoComplete="fuel_grade"
+                                    value={formData.fuel_grade}
+                                >
+                                    <MenuItem value="Regular">Regular</MenuItem>
+                                    <MenuItem value="Mid-grade">Mid-grade</MenuItem>
+                                    <MenuItem value="Premium">Premium</MenuItem>
+                                    <MenuItem value="Diesel">Diesel</MenuItem>
+                                </Select>
+                            </FormControl>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField

@@ -77,7 +77,7 @@ export default function Profile() {
 	return (
         <Container component="main">
             <CssBaseline />
-            <h1>{user}'s Profile</h1>
+            <h1>{user}</h1>
             <div>
                 <AppBar position="static">
                     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
