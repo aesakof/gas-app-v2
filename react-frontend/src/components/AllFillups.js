@@ -14,11 +14,12 @@ export default function AllFillups() {
 
     return (
         <>
-        {
-            fillups === null ?
-            <h5>Loading fillups data...</h5> :
-            <Fillups fillups={fillups} />
-        }
+            <br></br>
+            {
+                fillups === null ?
+                <h5>Loading fillups data...</h5> :
+                <Fillups fillups={fillups} />
+            }
         </>
       );
 }

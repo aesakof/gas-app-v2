@@ -8,6 +8,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 import ProfileOverview from './ProfileOverview';
 import ProfileCars from './ProfileCars';
@@ -18,6 +20,11 @@ import ProfileStats from './ProfileStats';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     },
 }));
 
@@ -77,7 +84,46 @@ export default function Profile() {
 	return (
         <Container component="main">
             <CssBaseline />
-            <h1>{user}</h1>
+            <div className={classes.root}>
+                <Grid container spacing={3}>
+                    <Grid item xs={6} sm={3}>
+                        <div>
+                            <h1>{user}</h1>
+                        </div>
+                    </Grid>
+                    <Grid item xs={6} sm={3}></Grid>
+                    <Grid item xs={6} sm={3}>
+                        <div className={classes.paper}>
+                            { user !== username ?
+                            <></> :
+                            <Link to={'/fillups/new'}>
+                                <Button
+                                    className={classes.button}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Enter New Fillup
+                                </Button>
+                            </Link>}
+                        </div>
+                    </Grid>
+                    <Grid item xs={6} sm={3}>
+                        <div className={classes.paper}>
+                            { user !== username ?
+                            <></> :
+                            <Link to={'/cars/register'}>
+                                <Button
+                                    className={classes.button}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Register New Car
+                                </Button>
+                            </Link> }
+                        </div>
+                    </Grid>
+                </Grid>
+            </div>
             <div>
                 <AppBar position="static">
                     <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">

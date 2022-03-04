@@ -6,6 +6,8 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContai
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
+import Moment from 'moment';
+
 
 const useStyles = makeStyles((theme) => ({
     // root: {
@@ -29,10 +31,27 @@ export default function ProfileStats(props) {
 
     useEffect(() => {
         axiosInstance.get('/fillups/?user__user_name=' + props.user).then((res) => {
+            res.data.forEach((row) => {
+                row["ts"] = Moment(row.date, "YYYY-MM-DD").valueOf();
+            });
+            console.log(res.data)
             setFillups(res.data)
         });
     }, [])
 
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="custom-tooltip">
+                    <p className="desc">{Moment(label).format("YYYY-MM-DD")}</p>
+                    <p className="label">{`mpg : ${payload[0].value}`}</p>
+                    <p className="intro">Anything you want can be displayed here.</p>
+                </div>
+            );
+        }
+
+        return null;
+    };
 
     return (
         <div className={classes.root}>
@@ -46,9 +65,14 @@ export default function ProfileStats(props) {
                             <LineChart data={fillups} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                                 <Line type="monotone" dataKey="mpg" stroke="#8884d8" />
                                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                                <XAxis dataKey="date" />
+                                <XAxis 
+                                    dataKey="ts" 
+                                    tickFormatter={(unixTimestamp) => Moment(unixTimestamp).format("YYYY-MM-DD")} 
+                                    domain={['auto', 'auto']} 
+                                    scale="time"/>
                                 <YAxis />
-                                <Tooltip />
+                                {/* <Tooltip /> */}
+                                <Tooltip content={<CustomTooltip />}/>
                             </LineChart>
                         </ResponsiveContainer>
                     </Paper>

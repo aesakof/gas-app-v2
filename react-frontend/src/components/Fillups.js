@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 		margin: theme.spacing(1, 1.5),
 	},
     button: {
-        marginTop: '25px',
         marginBottom: '25px',
     }
 }));
@@ -35,7 +34,7 @@ export default function Fillups(props) {
 
     return (
         <Container maxWidth="xl" component="main">
-            { !username ?
+            { !username || props.page === 'profile' ?
             <></> :
             <Link to={'/fillups/new'}>
                 <Button

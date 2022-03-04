@@ -14,11 +14,12 @@ export default function AllCars() {
 
     return (
         <>
-        {
-            cars === null ?
-            <h5>Loading cars data...</h5> :
-            <Cars cars={cars} />
-        }
+            <br></br>
+            {
+                cars === null ?
+                <h5>Loading cars data...</h5> :
+                <Cars cars={cars} />
+            }
         </>
       );
 }
