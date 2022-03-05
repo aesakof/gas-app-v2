@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+    // tabs: {
+    //     backgroundColor: 'purple'
+    // }
 }));
 
 function a11yProps(index) {
@@ -38,7 +41,7 @@ function a11yProps(index) {
 export default function Profile() {
 
     const location = useLocation();
-    console.log('Location=' + location.pathname.split("/")[2]);
+    // console.log('Location=' + location.pathname.split("/")[2]);
 
     const { user } = useParams();
     let { path, url } = useRouteMatch();
@@ -76,9 +79,9 @@ export default function Profile() {
         //     setFillups(res1.data)
         //     setCars(res2.data);
         // });
-        console.log('Value=' + value);
-        console.log('Path=' + path);
-        console.log('URL=' + url);
+        // console.log('Value=' + value);
+        // console.log('Path=' + path);
+        // console.log('URL=' + url);
     }, [value]);
 
 	return (
@@ -126,7 +129,7 @@ export default function Profile() {
             </div>
             <div>
                 <AppBar position="static">
-                    <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
+                    <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabs} variant="fullWidth">
                         <Tab label="Overview" component={Link} to={`${url}`} {...a11yProps(0)} />
                         <Tab label="Stats" component={Link} to={`${url}/stats`} {...a11yProps(1)} />
                         <Tab label="Fillups" component={Link} to={`${url}/fillups`} {...a11yProps(2)} />

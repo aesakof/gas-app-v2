@@ -1,43 +1,105 @@
 import { React, useEffect, useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+
 import axiosInstance from '../axios';
 import { Context } from "../Context";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
+import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 import Moment from 'moment';
 
 
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
 const useStyles = makeStyles((theme) => ({
-    // root: {
-    //   display: 'flex',
-    //   flexWrap: 'wrap',
-    //   '& > *': {
-    //     margin: theme.spacing(1),
-    //     width: theme.spacing(16),
-    //     height: theme.spacing(16),
-    //   },
-    // },
+    root: {
+        paddingBottom: '10px'
+    },
+    chart: {
+        paddingBottom: '30px',
+        paddingLeft: '20px'
+    },
     chartName: {
         padding: '10px',
         textAlign: 'center',
+    },
+    tab: {
+        border: '10px'
     }
   }));
 
 export default function ProfileStats(props) {
     const classes = useStyles();
-    const [fillups, setFillups] = useState(null)
+    const [fillups, setFillups] = useState([]);
+
+    const [value, setValue] = useState(0);
+  
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
     useEffect(() => {
-        axiosInstance.get('/fillups/?user__user_name=' + props.user).then((res) => {
-            res.data.forEach((row) => {
-                row["ts"] = Moment(row.date, "YYYY-MM-DD").valueOf();
-            });
-            console.log(res.data)
-            setFillups(res.data)
+        axiosInstance.get('/cars/?user__user_name=' + props.user).then((res) => {
+            res.data.map( (car) => {
+                axiosInstance.get('/fillups/?user__user_name=' + props.user + '&car=' + car.id).then((res2) => {
+                    res2.data.forEach((row) => {
+                        row["ts"] = Moment(row.date, "YYYY-MM-DD").valueOf();
+                    });
+                    setFillups(fillups => [...fillups, res2.data])
+                })
+            })
         });
     }, [])
+
+    // useEffect(() => {
+    //     axiosInstance.get('/fillups/?user__user_name=' + props.user).then((res) => {
+    //         res.data.forEach((row) => {
+    //             row["ts"] = Moment(row.date, "YYYY-MM-DD").valueOf();
+    //         });
+    //         console.log(res.data)
+    //         setFillups(res.data)
+    //     });
+    // }, [])
 
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
@@ -45,7 +107,6 @@ export default function ProfileStats(props) {
                 <div className="custom-tooltip">
                     <p className="desc">{Moment(label).format("YYYY-MM-DD")}</p>
                     <p className="label">{`mpg : ${payload[0].value}`}</p>
-                    <p className="intro">Anything you want can be displayed here.</p>
                 </div>
             );
         }
@@ -53,45 +114,94 @@ export default function ProfileStats(props) {
         return null;
     };
 
+    const CustomTab = withStyles({
+        root: {
+          backgroundColor: 'orange',
+        },
+        selected: {
+          backgroundColor: 'purple',
+        },
+      })(Tab);
+
     return (
         <div className={classes.root}>
+            <AppBar position="static">
+                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
+                    <CustomTab className={classes.tab} label="Item One" {...a11yProps(0)} />
+                    <CustomTab className={classes.tab} label="Item Two" {...a11yProps(1)} />
+                    <CustomTab className={classes.tab} label="Item Three" {...a11yProps(2)} />
+                </Tabs>
+            </AppBar>
+            <TabPanel value={value} index={0}>
+                Item One
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+                Item Two
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+                Item Three
+            </TabPanel>
             {
                 fillups === null ?
                 <h5>Stats Page is Rendering</h5> :
                 <>
-                    <Paper elevation={2}>
+                    <Paper elevation={2} className={classes.chart}>
                         <h3 className={classes.chartName}>Mileage Over Time</h3>
-                        <ResponsiveContainer width='80%' height={300}>
-                            <LineChart data={fillups} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                        <ResponsiveContainer width='90%' height={400}>
+                            <LineChart data={fillups} margin={{ top: 5, right: 50, bottom: 5, left: 0 }}>
                                 <Line type="monotone" dataKey="mpg" stroke="#8884d8" />
                                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                                 <XAxis 
+                                    label={{ value: "Fillup Date", position: "insideBottom", offset: 0 }}
                                     dataKey="ts" 
                                     tickFormatter={(unixTimestamp) => Moment(unixTimestamp).format("YYYY-MM-DD")} 
                                     domain={['auto', 'auto']} 
-                                    scale="time"/>
-                                <YAxis />
-                                {/* <Tooltip /> */}
-                                <Tooltip content={<CustomTooltip />}/>
+                                    scale="time"
+                                    angle={45}
+                                    height={100}
+                                    textAnchor="start"
+                                    width={10}
+                                />    
+                                <YAxis 
+                                    label={{ value: "MPG", angle: -90, position: "insideLeft" }}
+                                />
+                                <Tooltip 
+                                    content={<CustomTooltip />}
+                                    wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}
+                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </Paper>
-
 
                     <br></br>
-                    <Paper elevation={2}>
+
+                    <Paper elevation={2} className={classes.chart}>
                         <h3 className={classes.chartName}>Price/Gallon Over Time</h3>
-                        <ResponsiveContainer width='80%' height={300}>
-                            <LineChart data={fillups} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                        <ResponsiveContainer width='90%' height={400}>
+                            <LineChart data={fillups} margin={{ top: 5, right: 50, bottom: 5, left: 0 }}>
                                 <Line type="monotone" dataKey="price_per_gallon" stroke="#8884d8" />
                                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                                <XAxis dataKey="date" />
-                                <YAxis />
-                                <Tooltip />
+                                <XAxis 
+                                    label={{ value: "Fillup Date", position: "insideBottom", offset: 0 }}
+                                    dataKey="ts" 
+                                    tickFormatter={(unixTimestamp) => Moment(unixTimestamp).format("YYYY-MM-DD")} 
+                                    domain={['auto', 'auto']} 
+                                    scale="time"
+                                    angle={45}
+                                    height={100}
+                                    textAnchor="start"
+                                    width={10}
+                                />    
+                                <YAxis 
+                                    label={{ value: "Price/Gallon", angle: -90, position: "insideLeft" }}
+                                />
+                                <Tooltip 
+                                    content={<CustomTooltip />}
+                                    wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}
+                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </Paper>
-
                 </>
 
             }

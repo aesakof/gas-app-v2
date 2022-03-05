@@ -8,7 +8,7 @@ class FillupFilter(filters.FilterSet):
 
     class Meta:
         model = Fillup
-        fields = ['user__user_name','date']
+        fields = ['user__user_name','date','car','fuel_grade']
 
 
 class CarFilter(filters.FilterSet):
