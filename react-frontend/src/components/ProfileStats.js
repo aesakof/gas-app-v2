@@ -85,6 +85,7 @@ export default function ProfileStats(props) {
                     res2.data.forEach((row) => {
                         row["ts"] = Moment(row.date, "YYYY-MM-DD").valueOf();
                     });
+                    console.log(res2.data)
                     setFillups(fillups => [...fillups, res2.data])
                 })
             })
@@ -127,83 +128,75 @@ export default function ProfileStats(props) {
         <div className={classes.root}>
             <AppBar position="static">
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
-                    <CustomTab className={classes.tab} label="Item One" {...a11yProps(0)} />
-                    <CustomTab className={classes.tab} label="Item Two" {...a11yProps(1)} />
-                    <CustomTab className={classes.tab} label="Item Three" {...a11yProps(2)} />
+                    {
+                        fillups.map( (car_data, index) => (
+                            <CustomTab className={classes.tab} label={car_data[0]["car_name"]} {...a11yProps(index)} />
+                        ))
+                    }
                 </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0}>
-                Item One
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel>
             {
-                fillups === null ?
-                <h5>Stats Page is Rendering</h5> :
-                <>
-                    <Paper elevation={2} className={classes.chart}>
-                        <h3 className={classes.chartName}>Mileage Over Time</h3>
-                        <ResponsiveContainer width='90%' height={400}>
-                            <LineChart data={fillups} margin={{ top: 5, right: 50, bottom: 5, left: 0 }}>
-                                <Line type="monotone" dataKey="mpg" stroke="#8884d8" />
-                                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                                <XAxis 
-                                    label={{ value: "Fillup Date", position: "insideBottom", offset: 0 }}
-                                    dataKey="ts" 
-                                    tickFormatter={(unixTimestamp) => Moment(unixTimestamp).format("YYYY-MM-DD")} 
-                                    domain={['auto', 'auto']} 
-                                    scale="time"
-                                    angle={45}
-                                    height={100}
-                                    textAnchor="start"
-                                    width={10}
-                                />    
-                                <YAxis 
-                                    label={{ value: "MPG", angle: -90, position: "insideLeft" }}
-                                />
-                                <Tooltip 
-                                    content={<CustomTooltip />}
-                                    wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </Paper>
+                fillups.map( (car_data, index) => (
+                    <TabPanel value={value} index={index}>
+                        <Paper elevation={2} className={classes.chart}>
+                            <h3 className={classes.chartName}>Mileage Over Time</h3>
+                            <ResponsiveContainer width='90%' height={400}>
+                                <LineChart data={car_data} margin={{ top: 5, right: 60, bottom: 5, left: 5 }}>
+                                    <Line type="monotone" dataKey="mpg" stroke="#8884d8" />
+                                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                                    <XAxis 
+                                        label={{ value: "Fillup Date", position: "insideBottom", offset: 0 }}
+                                        dataKey="ts" 
+                                        tickFormatter={(unixTimestamp) => Moment(unixTimestamp).format("YYYY-MM-DD")} 
+                                        domain={['auto', 'auto']} 
+                                        scale="time"
+                                        angle={45}
+                                        height={100}
+                                        textAnchor="start"
+                                        width={10}
+                                    />    
+                                    <YAxis 
+                                        label={{ value: "MPG", angle: -90, position: "insideLeft" }}
+                                    />
+                                    <Tooltip 
+                                        content={<CustomTooltip />}
+                                        wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </Paper>
 
-                    <br></br>
+                        <br></br>
 
-                    <Paper elevation={2} className={classes.chart}>
-                        <h3 className={classes.chartName}>Price/Gallon Over Time</h3>
-                        <ResponsiveContainer width='90%' height={400}>
-                            <LineChart data={fillups} margin={{ top: 5, right: 50, bottom: 5, left: 0 }}>
-                                <Line type="monotone" dataKey="price_per_gallon" stroke="#8884d8" />
-                                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                                <XAxis 
-                                    label={{ value: "Fillup Date", position: "insideBottom", offset: 0 }}
-                                    dataKey="ts" 
-                                    tickFormatter={(unixTimestamp) => Moment(unixTimestamp).format("YYYY-MM-DD")} 
-                                    domain={['auto', 'auto']} 
-                                    scale="time"
-                                    angle={45}
-                                    height={100}
-                                    textAnchor="start"
-                                    width={10}
-                                />    
-                                <YAxis 
-                                    label={{ value: "Price/Gallon", angle: -90, position: "insideLeft" }}
-                                />
-                                <Tooltip 
-                                    content={<CustomTooltip />}
-                                    wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </Paper>
-                </>
-
+                        <Paper elevation={2} className={classes.chart}>
+                            <h3 className={classes.chartName}>Price/Gallon Over Time</h3>
+                            <ResponsiveContainer width='90%' height={400}>
+                                <LineChart data={car_data} margin={{ top: 5, right: 60, bottom: 5, left: 5 }}>
+                                    <Line type="monotone" dataKey="price_per_gallon" stroke="#8884d8" />
+                                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                                    <XAxis 
+                                        label={{ value: "Fillup Date", position: "insideBottom", offset: 0 }}
+                                        dataKey="ts" 
+                                        tickFormatter={(unixTimestamp) => Moment(unixTimestamp).format("YYYY-MM-DD")} 
+                                        domain={['auto', 'auto']} 
+                                        scale="time"
+                                        angle={45}
+                                        height={100}
+                                        textAnchor="start"
+                                        width={10}
+                                    />    
+                                    <YAxis 
+                                        label={{ value: "Price/Gallon", angle: -90, position: "insideLeft" }}
+                                    />
+                                    <Tooltip 
+                                        content={<CustomTooltip />}
+                                        wrapperStyle={{ backgroundColor: "white", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }}
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </Paper>
+                    </TabPanel>
+                ))
             }
         </div>
     )
