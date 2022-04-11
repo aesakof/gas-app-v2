@@ -13,6 +13,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 
 import Moment from 'moment';
 
@@ -57,11 +59,18 @@ const useStyles = makeStyles((theme) => ({
     },
     chart: {
         paddingBottom: '30px',
-        paddingLeft: '20px'
+        paddingLeft: '20px',
     },
     chartName: {
         padding: '10px',
         textAlign: 'center',
+    },
+    statsPanel: {
+        paddingTop: '5px',
+        paddingBottom: '5px',
+        paddingLeft: '20px',
+        paddingRight: '10px',
+        fontSize: '14px',
     },
     tab: {
         border: '10px'
@@ -70,7 +79,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProfileStats(props) {
     const classes = useStyles();
-    const [fillups, setFillups] = useState([]);
+
+    const [fillups, setFillups] = useState({});
+    const [cars, setCars] = useState([]);
+    const [carStats, setCarStats] = useState({});
+    const [userStats, setUserStats] = useState();
 
     const [value, setValue] = useState(0);
   
@@ -79,18 +92,36 @@ export default function ProfileStats(props) {
     };
 
     useEffect(() => {
+        axiosInstance.get('/stats/?user=' + props.user).then((res) => {
+            setUserStats(res.data);
+        });
+
+    }, []);
+
+    // API calls for individual car data
+    useEffect(() => {
         axiosInstance.get('/cars/?user__user_name=' + props.user).then((res) => {
             res.data.map( (car) => {
-                axiosInstance.get('/fillups/?user__user_name=' + props.user + '&car=' + car.id).then((res2) => {
-                    res2.data.forEach((row) => {
+                Promise.all([
+                    axiosInstance.get('/fillups/?user__user_name=' + props.user + '&car=' + car.id),
+                    axiosInstance.get('/stats/?user=' + props.user + '&car=' + car.id),
+                ]).then( ([res1, res2]) => {
+                    res1.data.forEach((row) => {
                         row["ts"] = Moment(row.date, "YYYY-MM-DD").valueOf();
                     });
-                    console.log(res2.data)
-                    setFillups(fillups => [...fillups, res2.data])
+                    setCars(cars => [...cars, car.name]);
+                    setFillups(fillups => ({
+                        ...fillups, 
+                        [car.name]: res1.data,
+                    }));
+                    setCarStats(carStats => ({
+                        ...carStats,
+                        [car.name]: res2.data,
+                    }));
                 })
             })
         });
-    }, [])
+    }, []);
 
     // useEffect(() => {
     //     axiosInstance.get('/fillups/?user__user_name=' + props.user).then((res) => {
@@ -126,22 +157,77 @@ export default function ProfileStats(props) {
 
     return (
         <div className={classes.root}>
+            {/* {console.log(fillups)}
+            {console.log(stats)} */}
+            <h2>Overall Statistics</h2>
+
+            {userStats && 
+
+            <Container component={Paper} className={classes.statsPanel}>
+                <Grid container spacing={3}>
+                    <Grid item xs={6}>
+                        <div>
+                            <p>First Fillup: {userStats["first_fillup"]}</p>
+                            <p>Last Fillup: {userStats["last_fillup"]}</p>
+                            <p>Cheapest Gas Purhased: ${userStats["min_price"]}</p>
+                            <p>Most Expensive Gas Purchased: ${userStats["max_price"]}</p>
+                            <p>Number of Cars: {userStats["car_count"]}</p>
+                            <p>Number of Fillups: {userStats["fillup_count"]}</p>
+                        </div>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <div>
+                            <p>Total Spent on Gas: {userStats["total_spent"]}</p>
+                            <p>Total Miles Driven: {userStats["total_driven"]}</p>
+                            <p>Total Gallons Filled: {userStats["gallons_filled"]}</p>
+                            <p>Average Miles/Gallon: {userStats["avg_mpg"]}</p>
+                        </div>
+                    </Grid>
+                </Grid>
+            </Container>}
+
+            <h2>Statistics Per Car</h2>
             <AppBar position="static">
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" variant="fullWidth">
                     {
-                        fillups.map( (car_data, index) => (
-                            <CustomTab className={classes.tab} label={car_data[0]["car_name"]} {...a11yProps(index)} />
+                        cars.map( (car_name, index) => (
+                            <CustomTab className={classes.tab} label={car_name} {...a11yProps(index)} />
                         ))
                     }
                 </Tabs>
             </AppBar>
             {
-                fillups.map( (car_data, index) => (
-                    <TabPanel value={value} index={index}>
+                cars.map( (car_name, index) => (
+                    <TabPanel value={value} index={index}>                        
+                        {carStats[car_name] && 
+                        <Container component={Paper} className={classes.statsPanel}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                                <div>
+                                    <p>First Fillup: {carStats[car_name]["first_fillup"]}</p>
+                                    <p>Last Fillup: {carStats[car_name]["last_fillup"]}</p>
+                                    <p>Cheapest Gas Purhased: ${carStats[car_name]["min_price"]}</p>
+                                    <p>Most Expensive Gas Purchased: ${carStats[car_name]["max_price"]}</p>
+                                    <p>Number of Fillups: {carStats[car_name]["fillup_count"]}</p>
+                                </div>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <div>
+                                    <p>Total Spent on Gas: {carStats[car_name]["total_spent"]}</p>
+                                    <p>Total Miles Driven: {carStats[car_name]["total_driven"]}</p>
+                                    <p>Total Gallons Filled: {carStats[car_name]["gallons_filled"]}</p>
+                                    <p>Average Miles/Gallon: {carStats[car_name]["avg_mpg"]}</p>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Container>}
+
+                        <br></br>
+
                         <Paper elevation={2} className={classes.chart}>
                             <h3 className={classes.chartName}>Mileage Over Time</h3>
                             <ResponsiveContainer width='90%' height={400}>
-                                <LineChart data={car_data} margin={{ top: 5, right: 60, bottom: 5, left: 5 }}>
+                                <LineChart data={fillups[car_name]} margin={{ top: 5, right: 60, bottom: 5, left: 5 }}>
                                     <Line type="monotone" dataKey="mpg" stroke="#8884d8" />
                                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                                     <XAxis 
@@ -171,7 +257,7 @@ export default function ProfileStats(props) {
                         <Paper elevation={2} className={classes.chart}>
                             <h3 className={classes.chartName}>Price/Gallon Over Time</h3>
                             <ResponsiveContainer width='90%' height={400}>
-                                <LineChart data={car_data} margin={{ top: 5, right: 60, bottom: 5, left: 5 }}>
+                                <LineChart data={fillups[car_name]} margin={{ top: 5, right: 60, bottom: 5, left: 5 }}>
                                     <Line type="monotone" dataKey="price_per_gallon" stroke="#8884d8" />
                                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                                     <XAxis 

@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework import urlpatterns
 from rest_framework.routers import SimpleRouter, DefaultRouter
 
-from .views import CarViewSet, FillupViewSet
+from .views import CarViewSet, FillupViewSet, Stats
 # from .views import FillupList, FillupDetail, CreateFillup, EditFillup, DeleteFillup, CarList, CreateCar, CarDetail, EditCar, DeleteCar
 
 
@@ -14,6 +14,7 @@ router.register(r'fillups', FillupViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('stats/', Stats, name="stat")
 ]
 
 

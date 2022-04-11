@@ -42,6 +42,7 @@ export default function ProfileOverview(props) {
     const classes = useStyles();
     const [cars, setCars] = useState(null)
     const [fillups, setFillups] = useState(null)
+    const [stats, setStats] = useState(null)
     const { username } = useContext(Context);
 
     useEffect(() => {
@@ -50,34 +51,42 @@ export default function ProfileOverview(props) {
         const date = Moment().subtract(1, 'years').format('YYYY-MM-DD')
         Promise.all([
             axiosInstance.get('/fillups/?user__user_name=' + props.user + '&date_after=' + date),
-            axiosInstance.get('/cars/?status=Active&user__user_name=' + props.user)
-        ]).then(function ([res1, res2]) {
+            axiosInstance.get('/cars/?status=Active&user__user_name=' + props.user),
+            axiosInstance.get('/stats/?user=' + props.user)
+        ]).then(function ([res1, res2, res3]) {
             setFillups(res1.data)
             setCars(res2.data);
+            setStats(res3.data);
         });
     }, [props.user]);
 
 	return (
         <>
-            <h2 className={classes.sectionHeader}>Overview Stats</h2>
-            <Container component={Paper} className={classes.root}>
-                <Grid container spacing={3}>
-                    <Grid item xs={6}>
-                        <div>
-                            <p># Cars Owned: </p>
-                            <p># Fillups Made: </p>
-                            <p>Total Distance Drive: </p>
-                        </div>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <div>
-                            <p>Total Gallons Filled: </p>
-                            <p>Total $ Spent: </p>
-                            <p>Average MPG: </p>
-                        </div>
-                    </Grid>
-                </Grid>
-            </Container>
+            {
+                stats === null?
+                <h5>Loading stats...</h5> :
+                <>
+                    <h2 className={classes.sectionHeader}>Overview Stats</h2>
+                    <Container component={Paper} className={classes.root}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                                <div>
+                                    <p># Cars Owned: {stats.car_count}</p>
+                                    <p># Fillups Made: {stats.fillup_count}</p>
+                                    <p>Total Distance Driven: {stats.total_driven}</p>
+                                </div>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <div>
+                                    <p>Total Gallons Filled: {stats.gallons_filled}</p>
+                                    <p>Total $ Spent: {stats.total_spent}</p>
+                                    <p>Average MPG: {stats.avg_mpg}</p>
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Container>
+                </>
+            }
             {
                 cars === null ?
                 <h5>Loading cars data...</h5> :
