@@ -198,6 +198,7 @@ Install dependencies for the frontend:
     npm i @material-ui/pickers
     npm install --save moment
 
+Note: Might need to add this if getting dependency errors: --legacy-peer-deps
 
 DO OTHER FRONT END SET UP STUFF
 
@@ -355,7 +356,7 @@ In settings.py add 'from datetime import timedelta' and add the following to the
             'UPDATE_LAST_LOGIN': False,
 
             'ALGORITHM': 'HS256',
-            'SIGNING_KEY': settings.SECRET_KEY,
+            'SIGNING_KEY': SECRET_KEY,
             'VERIFYING_KEY': None,
             'AUDIENCE': None,
             'ISSUER': None,

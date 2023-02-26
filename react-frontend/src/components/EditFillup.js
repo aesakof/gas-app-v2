@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function CreateFillup() {
+export default function EditFillup() {
 
     const history = useHistory();
     const { id } = useParams();

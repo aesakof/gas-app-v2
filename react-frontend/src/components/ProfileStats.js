@@ -169,8 +169,8 @@ export default function ProfileStats(props) {
                         <div>
                             <p>First Fillup: {userStats["first_fillup"]}</p>
                             <p>Last Fillup: {userStats["last_fillup"]}</p>
-                            <p>Cheapest Gas Purhased: ${userStats["min_price"]}</p>
-                            <p>Most Expensive Gas Purchased: ${userStats["max_price"]}</p>
+                            <p>Cheapest Gas Purhased: ${userStats["min_price"]}/gallon</p>
+                            <p>Most Expensive Gas Purchased: ${userStats["max_price"]}/gallon</p>
                             <p>Number of Cars: {userStats["car_count"]}</p>
                             <p>Number of Fillups: {userStats["fillup_count"]}</p>
                         </div>
@@ -201,26 +201,26 @@ export default function ProfileStats(props) {
                     <TabPanel value={value} index={index}>                        
                         {carStats[car_name] && 
                         <Container component={Paper} className={classes.statsPanel}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={6}>
-                                <div>
-                                    <p>First Fillup: {carStats[car_name]["first_fillup"]}</p>
-                                    <p>Last Fillup: {carStats[car_name]["last_fillup"]}</p>
-                                    <p>Cheapest Gas Purhased: ${carStats[car_name]["min_price"]}</p>
-                                    <p>Most Expensive Gas Purchased: ${carStats[car_name]["max_price"]}</p>
-                                    <p>Number of Fillups: {carStats[car_name]["fillup_count"]}</p>
-                                </div>
+                            <Grid container spacing={3}>
+                                <Grid item xs={6}>
+                                    <div>
+                                        <p>First Fillup: {carStats[car_name]["first_fillup"]}</p>
+                                        <p>Last Fillup: {carStats[car_name]["last_fillup"]}</p>
+                                        <p>Cheapest Gas Purhased: ${carStats[car_name]["min_price"]}/gallon</p>
+                                        <p>Most Expensive Gas Purchased: ${carStats[car_name]["max_price"]}/gallon</p>
+                                        <p>Number of Fillups: {carStats[car_name]["fillup_count"]}</p>
+                                    </div>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <div>
+                                        <p>Total Spent on Gas: {carStats[car_name]["total_spent"]}</p>
+                                        <p>Total Miles Driven: {carStats[car_name]["total_driven"]}</p>
+                                        <p>Total Gallons Filled: {carStats[car_name]["gallons_filled"]}</p>
+                                        <p>Average Miles/Gallon: {carStats[car_name]["avg_mpg"]}</p>
+                                    </div>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={6}>
-                                <div>
-                                    <p>Total Spent on Gas: {carStats[car_name]["total_spent"]}</p>
-                                    <p>Total Miles Driven: {carStats[car_name]["total_driven"]}</p>
-                                    <p>Total Gallons Filled: {carStats[car_name]["gallons_filled"]}</p>
-                                    <p>Average Miles/Gallon: {carStats[car_name]["avg_mpg"]}</p>
-                                </div>
-                            </Grid>
-                        </Grid>
-                    </Container>}
+                        </Container>}
 
                         <br></br>
 
